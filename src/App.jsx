@@ -5,21 +5,11 @@ import Grid from "./components/Grid";
 import Categories from "./components/Categories";
 import DetailPage from "./components/DetailPage";
 import Search from "./components/Search";
-import ItemsApi from "./store/ItemsApi";
 import { Container, Row, Col } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
-
-import "./App.css"; // Import your custom CSS file
+import "./App.css";
 
 function App() {
-  const { data, isLoading, isError, error } = ItemsApi.useGetAllItemsQuery();
-
-  if (isError) {
-    console.error("An error occurred: ", error);
-    return;
-  }
-
-  console.log(data);
   return (
     <Router>
       <Header />
@@ -34,12 +24,18 @@ function App() {
 function HomePage() {
   return (
     <>
-      <Categories className="mt-3"></Categories>
-      <Container>
-        <Row className="justify-content-center">
-          <Col xs={12} md={6}>
-            <Search className="mb-3" style={{ marginBottom: "200px" }} />
-            <Grid className="mb-3" style={{ marginBottom: "300px" }} />
+      <div className="categories-wrapper">
+        <Categories />
+      </div>
+      <Container style={{ maxWidth: "800px" }}>
+        <Row>
+          <Col>
+            <Search />
+          </Col>
+        </Row>
+        <Row className="mt-4">
+          <Col>
+            <Grid />
           </Col>
         </Row>
       </Container>

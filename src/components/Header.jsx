@@ -18,7 +18,7 @@ const Header = () => {
         justifyContent: "space-between",
       }}
     >
-      <Navbar.Brand href="#home" style={{ marginRight: "2rem" }}>
+      <Navbar.Brand href="/" style={{ marginRight: "2rem" }}>
         <img
           src="/src/assets/logo.png"
           width="50"

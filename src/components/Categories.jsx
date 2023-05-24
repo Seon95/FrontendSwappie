@@ -10,9 +10,11 @@ const Categories = () => {
   };
 
   return (
-    <div>
+    <div className="categories-wrapper">
+      {" "}
+      {/* Added categories-wrapper class */}
       {categories.map((category, index) => (
-        <div key={index}>
+        <div key={index} style={{ marginBottom: "30px" }}>
           <label>
             <input
               type="radio"
