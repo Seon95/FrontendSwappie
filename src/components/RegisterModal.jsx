@@ -23,7 +23,7 @@ const RegisterModal = () => {
 
     try {
       const response = await fetch(
-        "https://www.s10.syntradeveloper.be/api/register",
+        "https://orca-app-ik7qo.ondigitalocean.app/api/register",
         {
           method: "POST",
           headers: {

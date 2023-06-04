@@ -8,6 +8,7 @@ import Search from "./components/Search";
 import { Container, Row, Col } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
+import ItemsApi from "./store/ItemsApi";
 
 function App() {
   return (
@@ -22,6 +23,9 @@ function App() {
 }
 
 function HomePage() {
+  const { data, isLoading } = ItemsApi.useGetAllItemsQuery();
+  console.log(data);
+
   return (
     <>
       <div className="categories-wrapper">

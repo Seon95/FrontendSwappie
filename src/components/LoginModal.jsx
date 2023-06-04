@@ -26,7 +26,7 @@ const LoginModal = ({ handleLogin }) => {
     setIsLoading(true);
     try {
       const response = await fetch(
-        "https://www.s10.syntradeveloper.be/api/login",
+        "https://orca-app-ik7qo.ondigitalocean.app/api/login",
         {
           method: "POST",
           headers: {
