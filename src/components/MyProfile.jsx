@@ -78,9 +78,22 @@ const MyProfile = ({ userId, token }) => {
     }
   };
 
-  const handleDeleteItem = (itemId) => {
-    const updatedItems = items.filter((item) => item.id !== itemId);
-    setItems(updatedItems);
+  const handleDeleteItem = async (itemId) => {
+    try {
+      await axios.delete(
+        `https://orca-app-ik7qo.ondigitalocean.app/api/users/${userId}/items/${itemId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      const updatedItems = items.filter((item) => item.id !== itemId);
+      setItems(updatedItems);
+    } catch (error) {
+      console.error("Error deleting item:", error);
+    }
   };
 
   const handleEditItem = (itemId) => {
