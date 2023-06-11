@@ -1,34 +1,41 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-const ChangeItem = ({ items }) => {
-  const itemImages = [
-    "/src/assets/image1.jpg",
-    "/src/assets/image2.jpg",
-    "/src/assets/image3.jpg",
-    // ... add more image paths here
-  ];
-  console.log("change" + items);
-  const CustomPrevArrow = (props) => (
-    <button
-      className="custom-arrow custom-prev-arrow"
-      onClick={props.onClick}
-      style={{ color: "blue" }}
-    >
-      &lt;
-    </button>
-  );
+import axios from "axios";
 
-  const CustomNextArrow = (props) => (
-    <button
-      className="custom-arrow custom-next-arrow"
-      onClick={props.onClick}
-      style={{ color: "blue" }}
-    >
-      &gt;
-    </button>
-  );
+const ChangeItem = ({ itemId }) => {
+  const [wantedItemImages, setWantedItemImages] = useState([]);
+  const [myItemImages, setMyItemImages] = useState([]);
+  const [itemDescription, setItemDescription] = useState("");
+
+  useEffect(() => {
+    const fetchItemData = async () => {
+      try {
+        const wantedItemResponse = await axios.get(
+          `https://orca-app-ik7qo.ondigitalocean.app/api/items/${itemId}/user`
+        );
+        const wantedItemData = JSON.parse(wantedItemResponse.data.user.items);
+        const wantedItemImages = wantedItemData
+          .map((item) => item.images)
+          .flat();
+        setWantedItemImages(wantedItemImages);
+        setItemDescription(wantedItemData[0].description);
+
+        const userId = localStorage.getItem("userId");
+        const userItemsResponse = await axios.get(
+          `https://orca-app-ik7qo.ondigitalocean.app/api/users/${userId}`
+        );
+        const userItemsData = userItemsResponse.data.items;
+        const userItemImages = userItemsData.map((item) => item.images).flat();
+        setMyItemImages(userItemImages);
+      } catch (error) {
+        console.error("Error fetching item data:", error);
+      }
+    };
+
+    fetchItemData();
+  }, [itemId]);
 
   const sliderSettings = {
     dots: true,
@@ -37,8 +44,6 @@ const ChangeItem = ({ items }) => {
     slidesToShow: 1,
     slidesToScroll: 1,
     arrows: true,
-    prevArrow: <CustomPrevArrow />,
-    nextArrow: <CustomNextArrow />,
   };
 
   return (
@@ -46,35 +51,43 @@ const ChangeItem = ({ items }) => {
       <div className="square">
         <h2 className="title">Wanted item</h2>
         <div className="slider-container">
-          <img
-            className="image"
-            src="/src/assets/image1.jpg"
-            alt="Wanted item"
-          />
+          {wantedItemImages.length > 0 ? (
+            <Slider {...sliderSettings}>
+              {wantedItemImages.map((image, index) => (
+                <div key={index} className="slider-image-container">
+                  <img
+                    className="slider-image"
+                    src={"/" + image}
+                    alt={`Item ${index}`}
+                  />
+                </div>
+              ))}
+            </Slider>
+          ) : (
+            <p>Loading...</p>
+          )}
         </div>
-        <p className="description">Description of the wanted item goes here.</p>
-      </div>
-      <div className="send-request-container">
-        <button className="send-request-button">Send Request</button>
+        <p className="description">{itemDescription}</p>
       </div>
       <div className="square">
         <h2 className="title">My Items</h2>
         <div className="slider-container">
-          <Slider {...sliderSettings}>
-            {itemImages.map((image, index) => (
-              <div key={index} className="slider-image-container">
-                <img
-                  className="slider-image"
-                  src={image}
-                  alt={`Item ${index}`}
-                />
-              </div>
-            ))}
-          </Slider>
+          {myItemImages.length > 0 ? (
+            <Slider {...sliderSettings}>
+              {myItemImages.map((image, index) => (
+                <div key={index} className="slider-image-container">
+                  <img
+                    className="slider-image"
+                    src={"/" + image}
+                    alt={`My Item ${index}`}
+                  />
+                </div>
+              ))}
+            </Slider>
+          ) : (
+            <p>No items found.</p>
+          )}
         </div>
-        <p className="description">
-          Description of the another item goes here.
-        </p>
       </div>
     </div>
   );

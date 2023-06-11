@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Container, Card, Button, Form } from "react-bootstrap";
+import { Container, Card, Button, Form, Modal } from "react-bootstrap";
 import axios from "axios";
 
 const MyProfile = ({ userId, token }) => {
@@ -9,7 +9,15 @@ const MyProfile = ({ userId, token }) => {
   const [category, setCategory] = useState("");
   const [selectedImage, setSelectedImage] = useState(null);
   const [quantity, setQuantity] = useState(0);
-  const [isSubmitting, setIsSubmitting] = useState(false); // New state variable
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [editItemData, setEditItemData] = useState({
+    id: "",
+    name: "",
+    description: "",
+    category: "",
+    quantity: 0,
+  });
 
   useEffect(() => {
     const fetchData = async () => {
@@ -30,12 +38,11 @@ const MyProfile = ({ userId, token }) => {
   const handleAddItem = async (e) => {
     e.preventDefault();
 
-    // Ignore if form is already being submitted
     if (isSubmitting) {
       return;
     }
 
-    setIsSubmitting(true); // Set submitting flag to true
+    setIsSubmitting(true);
 
     try {
       const formData = new FormData();
@@ -58,13 +65,11 @@ const MyProfile = ({ userId, token }) => {
         }
       );
 
-      // Refresh items
       const response = await axios.get(
         `https://orca-app-ik7qo.ondigitalocean.app/api/users/${userId}`
       );
       setItems(response.data.items);
 
-      // Clear form fields
       setName("");
       setDescription("");
       setCategory("");
@@ -74,7 +79,7 @@ const MyProfile = ({ userId, token }) => {
     } catch (error) {
       console.error("Error adding item:", error);
     } finally {
-      setIsSubmitting(false); // Reset submitting flag to false
+      setIsSubmitting(false);
     }
   };
 
@@ -96,9 +101,63 @@ const MyProfile = ({ userId, token }) => {
     }
   };
 
-  const handleEditItem = (itemId) => {
-    // Implement your logic for editing an item here
-    console.log("Edit item:", itemId);
+  const handleEditItem = (item) => {
+    setEditItemData({
+      id: item.id,
+
+      name: item.name,
+      description: item.description,
+      category: item.category_id,
+      quantity: item.quantity,
+    });
+    setShowModal(true);
+  };
+
+  const handleModalClose = () => {
+    setShowModal(false);
+    setEditItemData({
+      id: "",
+      name: "",
+      description: "",
+      category: "",
+      quantity: 0,
+    });
+  };
+
+  const handleUpdateItem = async () => {
+    try {
+      await axios.put(
+        `https://orca-app-ik7qo.ondigitalocean.app/api/users/${userId}/items/${editItemData.id}`,
+        {
+          name: editItemData.name,
+          description: editItemData.description,
+          category_id: editItemData.category,
+          quantity: editItemData.quantity,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      const response = await axios.get(
+        `https://orca-app-ik7qo.ondigitalocean.app/api/users/${userId}`
+      );
+      setItems(response.data.items);
+    } catch (error) {
+      console.error("Error updating item:", error);
+    } finally {
+      setShowModal(false);
+      setEditItemData({
+        id: "",
+        name: "",
+        description: "",
+        category: "",
+        quantity: 0,
+      });
+    }
   };
 
   return (
@@ -124,10 +183,7 @@ const MyProfile = ({ userId, token }) => {
                 >
                   Delete
                 </Button>
-                <Button
-                  variant="primary"
-                  onClick={() => handleEditItem(item.id)}
-                >
+                <Button variant="primary" onClick={() => handleEditItem(item)}>
                   Edit
                 </Button>
               </Card.Body>
@@ -185,6 +241,77 @@ const MyProfile = ({ userId, token }) => {
           </Button>
         </Form>
       </div>
+
+      <Modal show={showModal} onHide={handleModalClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Edit Item</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form>
+            <Form.Group controlId="editName">
+              <Form.Label>Name</Form.Label>
+              <Form.Control
+                type="text"
+                value={editItemData.name || ""}
+                onChange={(e) =>
+                  setEditItemData({
+                    ...editItemData,
+                    name: e.target.value,
+                  })
+                }
+              />
+            </Form.Group>
+            <Form.Group controlId="editDescription">
+              <Form.Label>Description</Form.Label>
+              <Form.Control
+                as="textarea"
+                rows={3}
+                value={editItemData.description || ""}
+                onChange={(e) =>
+                  setEditItemData({
+                    ...editItemData,
+                    description: e.target.value,
+                  })
+                }
+              />
+            </Form.Group>
+            <Form.Group controlId="editCategory">
+              <Form.Label>Category</Form.Label>
+              <Form.Control
+                type="text"
+                value={editItemData.category || ""}
+                onChange={(e) =>
+                  setEditItemData({
+                    ...editItemData,
+                    category: e.target.value,
+                  })
+                }
+              />
+            </Form.Group>
+            <Form.Group controlId="editQuantity">
+              <Form.Label>Quantity</Form.Label>
+              <Form.Control
+                type="number"
+                value={editItemData.quantity || 0}
+                onChange={(e) =>
+                  setEditItemData({
+                    ...editItemData,
+                    quantity: Number(e.target.value),
+                  })
+                }
+              />
+            </Form.Group>
+          </Form>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleModalClose}>
+            Cancel
+          </Button>
+          <Button variant="primary" onClick={handleUpdateItem}>
+            Update
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </Container>
   );
 };

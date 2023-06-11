@@ -54,7 +54,7 @@ const Grid = ({ items }) => {
         </div>
       ))}
       <Routes>
-        <Route path="/detail/:id" element={<DetailPage items={items} />} />
+        <Route path="/detail/:id" element={<DetailPage />} />
       </Routes>
     </div>
   );
