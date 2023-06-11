@@ -2,14 +2,12 @@ import React from "react";
 import { Link, Routes, Route } from "react-router-dom";
 import DetailPage from "./DetailPage";
 
-const Grid = () => {
-  const imageArray = [
-    "/src/assets/image1.jpg",
-    "/src/assets/image2.jpg",
-    "/src/assets/image3.jpg",
-    "/src/assets/image4.jpg",
-    // ... add more image paths here
-  ];
+const Grid = ({ items }) => {
+  console.log("jeje" + JSON.stringify(items));
+
+  if (!items || items.length === 0) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div
@@ -23,9 +21,9 @@ const Grid = () => {
         margin: "0 auto",
       }}
     >
-      {imageArray.map((imageUrl, index) => (
+      {items.map((item) => (
         <div
-          key={index}
+          key={item.id}
           style={{
             maxWidth: "250px",
             maxHeight: "270px",
@@ -34,25 +32,29 @@ const Grid = () => {
             width: "100%",
           }}
         >
-          <Link to={`/detail/${index + 1}`}>
-            <img
-              src={imageUrl}
-              alt={`image-${index}`}
-              style={{
-                display: "block",
-                width: "100%",
-                height: "auto",
-                objectFit: "cover",
-                margin: "0",
-                padding: "0",
-                marginBottom: "30px",
-              }}
-            />
+          <Link to={`/detail/${item.id}`}>
+            {item.images && item.images.length > 0 ? (
+              <img
+                src={item.images[0]}
+                alt={`image-${item.id}`}
+                style={{
+                  display: "block",
+                  width: "100%",
+                  height: "auto",
+                  objectFit: "cover",
+                  margin: "0",
+                  padding: "0",
+                  marginBottom: "30px",
+                }}
+              />
+            ) : (
+              <div>No image available</div>
+            )}
           </Link>
         </div>
       ))}
       <Routes>
-        <Route path="/detail/:id" />
+        <Route path="/detail/:id" element={<DetailPage items={items} />} />
       </Routes>
     </div>
   );

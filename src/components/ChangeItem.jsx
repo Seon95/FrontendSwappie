@@ -2,14 +2,14 @@ import React from "react";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-const ChangeItem = () => {
+const ChangeItem = ({ items }) => {
   const itemImages = [
     "/src/assets/image1.jpg",
     "/src/assets/image2.jpg",
     "/src/assets/image3.jpg",
     // ... add more image paths here
   ];
-
+  console.log("change" + items);
   const CustomPrevArrow = (props) => (
     <button
       className="custom-arrow custom-prev-arrow"

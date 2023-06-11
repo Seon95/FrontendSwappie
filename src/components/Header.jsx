@@ -1,10 +1,11 @@
 import React from "react";
 import { Navbar, Nav, ButtonGroup } from "react-bootstrap";
+import { Link } from "react-router-dom";
 import LoginModal from "./LoginModal";
 import RegisterModal from "./RegisterModal";
 import "../index.css";
 
-const Header = () => {
+const Header = ({ handleLogin, loggedIn, userName }) => {
   return (
     <Navbar
       className="w-100"
@@ -18,7 +19,7 @@ const Header = () => {
         justifyContent: "space-between",
       }}
     >
-      <Navbar.Brand href="/" style={{ marginRight: "2rem" }}>
+      <Navbar.Brand as={Link} to="/" style={{ marginRight: "2rem" }}>
         <img
           src="/src/assets/logo.png"
           width="50"
@@ -34,16 +35,31 @@ const Header = () => {
         <Nav.Link className="nav-link-spacing" href="#chat">
           Chat
         </Nav.Link>
-        <Nav.Link className="nav-link-spacing" href="#notifications">
+        <Nav.Link
+          as={Link}
+          to="/notifications"
+          className="nav-link-spacing"
+          href="#notifications"
+        >
           Notifications
         </Nav.Link>
-        <Nav.Link className="nav-link-spacing" href="#my-profile">
-          My Profile
-        </Nav.Link>
+        {loggedIn ? (
+          <Nav.Link as={Link} to="/myprofile" className="nav-link-spacing">
+            My Profile
+          </Nav.Link>
+        ) : null}
       </Nav>
       <ButtonGroup>
-        <LoginModal />
-        <RegisterModal />
+        {loggedIn ? (
+          <span style={{ marginRight: "1rem", color: "white" }}>
+            Welcome, {userName}
+          </span>
+        ) : (
+          <>
+            <LoginModal handleLogin={handleLogin} />
+            <RegisterModal />
+          </>
+        )}
       </ButtonGroup>
     </Navbar>
   );
