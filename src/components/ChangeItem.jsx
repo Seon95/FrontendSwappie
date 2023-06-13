@@ -8,6 +8,7 @@ const ChangeItem = ({ itemId }) => {
   const [wantedItemImages, setWantedItemImages] = useState([]);
   const [myItemImages, setMyItemImages] = useState([]);
   const [itemDescription, setItemDescription] = useState("");
+  const [receiverId, setReceiverId] = useState(null);
 
   useEffect(() => {
     const fetchItemData = async () => {
@@ -21,6 +22,11 @@ const ChangeItem = ({ itemId }) => {
           .flat();
         setWantedItemImages(wantedItemImages);
         setItemDescription(wantedItemData[0].description);
+
+        const receiverResponse = await axios.get(
+          `https://orca-app-ik7qo.ondigitalocean.app/api/items/${itemId}/user`
+        );
+        setReceiverId(receiverResponse.data.user.id);
 
         const userId = localStorage.getItem("userId");
         const userItemsResponse = await axios.get(
@@ -36,6 +42,26 @@ const ChangeItem = ({ itemId }) => {
 
     fetchItemData();
   }, [itemId]);
+
+  const handleSwapItemRequest = async () => {
+    try {
+      const senderId = localStorage.getItem("userId");
+      const requestPayload = {
+        sender_id: senderId,
+        receiver_id: receiverId,
+        item_id: itemId,
+      };
+
+      await axios.post(
+        "https://orca-app-ik7qo.ondigitalocean.app/api/swap-requests",
+        requestPayload
+      );
+      alert("Swap item request sent successfully!");
+    } catch (error) {
+      console.error("Error sending swap item request:", error);
+      alert("Error sending swap item request. Please try again.");
+    }
+  };
 
   const sliderSettings = {
     dots: true,
@@ -68,6 +94,7 @@ const ChangeItem = ({ itemId }) => {
           )}
         </div>
         <p className="description">{itemDescription}</p>
+        <button onClick={handleSwapItemRequest}>Send Swap Request</button>
       </div>
       <div className="square">
         <h2 className="title">My Items</h2>

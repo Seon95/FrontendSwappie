@@ -171,11 +171,14 @@ const MyProfile = ({ userId, token }) => {
                 <Card.Title>{item.name}</Card.Title>
                 <Card.Text>{item.description}</Card.Text>
                 <Card.Text>{item.category}</Card.Text>
-                <Card.Img
-                  src={item.image}
-                  alt={item.name}
-                  className="img-fluid"
-                />
+                {item.images.length > 0 && (
+                  <Card.Img
+                    src={item.images[0]}
+                    alt={`Image 1`}
+                    className="img-fluid"
+                    style={{ width: "70px", height: "70px" }}
+                  />
+                )}
                 <Button
                   variant="danger"
                   className="mr-2"
