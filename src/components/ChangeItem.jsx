@@ -12,6 +12,7 @@ const ChangeItem = ({ itemId }) => {
   const [receiverId, setReceiverId] = useState(null);
   const [myItemId, setMyItemId] = useState("");
   const [isSliderEnabled, setIsSliderEnabled] = useState(true);
+  const [isButtonClickable, setIsButtonClickable] = useState(false);
 
   useEffect(() => {
     const fetchItemData = async () => {
@@ -21,14 +22,14 @@ const ChangeItem = ({ itemId }) => {
         );
         const wantedItemData = JSON.parse(wantedItemResponse.data.user.items);
         console.log(wantedItemData);
-        const wantedItem = wantedItemData.filter(
+        const wantedItem = wantedItemData.find(
           (item) => item.id.toString() === itemId.toString()
         );
 
-        if (wantedItem.length > 0) {
-          const wantedItemImages = wantedItem[0].images.flat();
+        if (wantedItem) {
+          const wantedItemImages = wantedItem.images.flat();
           setWantedItemImages(wantedItemImages);
-          setItemDescription(wantedItem[0].description);
+          setItemDescription(wantedItem.description);
         } else {
           console.error("Error: Wanted item not found.");
         }
@@ -55,6 +56,10 @@ const ChangeItem = ({ itemId }) => {
 
     fetchItemData();
   }, [itemId]);
+
+  useEffect(() => {
+    setIsButtonClickable(!!myItemId);
+  }, [myItemId]);
 
   const handleSwapItemRequest = async () => {
     try {
@@ -113,7 +118,11 @@ const ChangeItem = ({ itemId }) => {
         <p className="description">{itemDescription}</p>
       </div>
       <div className="send-request-container">
-        <Button className="send-request-button" onClick={handleSwapItemRequest}>
+        <Button
+          className="send-request-button"
+          onClick={handleSwapItemRequest}
+          disabled={!isButtonClickable}
+        >
           Send Swap Request
         </Button>
       </div>
