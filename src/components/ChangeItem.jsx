@@ -9,6 +9,10 @@ const ChangeItem = ({ itemId }) => {
   const [myItemImages, setMyItemImages] = useState([]);
   const [itemDescription, setItemDescription] = useState("");
   const [receiverId, setReceiverId] = useState(null);
+  const [myItemId, setMyItemId] = useState("");
+  const [isSliderEnabled, setIsSliderEnabled] = useState(true);
+
+  console.log("x" + myItemId);
 
   useEffect(() => {
     const fetchItemData = async () => {
@@ -33,8 +37,14 @@ const ChangeItem = ({ itemId }) => {
           `https://orca-app-ik7qo.ondigitalocean.app/api/users/${userId}`
         );
         const userItemsData = userItemsResponse.data.items;
-        const userItemImages = userItemsData.map((item) => item.images).flat();
+        const userItemImages = userItemsData.map((item) => ({
+          id: item.id,
+          images: item.images.flat(),
+        }));
         setMyItemImages(userItemImages);
+        console.log(myItemImages);
+        // console.log(idAndImg.map((img) => console.log(img)));
+        // setMyItemImages(userItemImages);
       } catch (error) {
         console.error("Error fetching item data:", error);
       }
@@ -50,9 +60,9 @@ const ChangeItem = ({ itemId }) => {
         sender_id: senderId,
         receiver_id: receiverId,
         item_id: itemId,
-        my_item_id: 1,
+        my_item_id: myItemId,
       };
-
+      console.log("xx" + myItemId);
       await axios.post(
         "https://orca-app-ik7qo.ondigitalocean.app/api/swap-requests",
         requestPayload
@@ -72,7 +82,13 @@ const ChangeItem = ({ itemId }) => {
     slidesToScroll: 1,
     arrows: true,
   };
+  const handleMyItemSelection = (id) => {
+    setMyItemId(id);
+    console.log("Selected Item ID:", id);
+    setIsSliderEnabled(false);
+  };
 
+  console.log("tt" + myItemId);
   return (
     <div className="change-item-container">
       <div className="square">
@@ -101,14 +117,23 @@ const ChangeItem = ({ itemId }) => {
         <h2 className="title">My Items</h2>
         <div className="slider-container">
           {myItemImages.length > 0 ? (
-            <Slider {...sliderSettings}>
-              {myItemImages.map((image, index) => (
-                <div key={index} className="slider-image-container">
-                  <img
-                    className="slider-image"
-                    src={"/" + image}
-                    alt={`My Item ${index}`}
-                  />
+            <Slider {...sliderSettings} disabled={!isSliderEnabled}>
+              {myItemImages.map((item, index) => (
+                <div key={item.id} className="slider-image-container">
+                  {item.images.map((image, imageIndex) => (
+                    <div key={imageIndex} className="my-item">
+                      <img
+                        className="slider-image"
+                        src={"/" + image}
+                        alt={`My Item ${index}`}
+                      />
+                      {isSliderEnabled && (
+                        <button onClick={() => handleMyItemSelection(item.id)}>
+                          Select
+                        </button>
+                      )}
+                    </div>
+                  ))}
                 </div>
               ))}
             </Slider>
