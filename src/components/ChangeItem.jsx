@@ -12,8 +12,6 @@ const ChangeItem = ({ itemId }) => {
   const [myItemId, setMyItemId] = useState("");
   const [isSliderEnabled, setIsSliderEnabled] = useState(true);
 
-  console.log("x" + myItemId);
-
   useEffect(() => {
     const fetchItemData = async () => {
       try {
@@ -21,11 +19,18 @@ const ChangeItem = ({ itemId }) => {
           `https://orca-app-ik7qo.ondigitalocean.app/api/items/${itemId}/user`
         );
         const wantedItemData = JSON.parse(wantedItemResponse.data.user.items);
-        const wantedItemImages = wantedItemData
-          .map((item) => item.images)
-          .flat();
-        setWantedItemImages(wantedItemImages);
-        setItemDescription(wantedItemData[0].description);
+        console.log(wantedItemData);
+        const wantedItem = wantedItemData.filter(
+          (item) => item.id.toString() === itemId.toString()
+        );
+
+        if (wantedItem.length > 0) {
+          const wantedItemImages = wantedItem[0].images.flat();
+          setWantedItemImages(wantedItemImages);
+          setItemDescription(wantedItem[0].description);
+        } else {
+          console.error("Error: Wanted item not found.");
+        }
 
         const receiverResponse = await axios.get(
           `https://orca-app-ik7qo.ondigitalocean.app/api/items/${itemId}/user`
@@ -42,9 +47,6 @@ const ChangeItem = ({ itemId }) => {
           images: item.images.flat(),
         }));
         setMyItemImages(userItemImages);
-        console.log(myItemImages);
-        // console.log(idAndImg.map((img) => console.log(img)));
-        // setMyItemImages(userItemImages);
       } catch (error) {
         console.error("Error fetching item data:", error);
       }
@@ -62,7 +64,6 @@ const ChangeItem = ({ itemId }) => {
         item_id: itemId,
         my_item_id: myItemId,
       };
-      console.log("xx" + myItemId);
       await axios.post(
         "https://orca-app-ik7qo.ondigitalocean.app/api/swap-requests",
         requestPayload
@@ -84,11 +85,9 @@ const ChangeItem = ({ itemId }) => {
   };
   const handleMyItemSelection = (id) => {
     setMyItemId(id);
-    console.log("Selected Item ID:", id);
     setIsSliderEnabled(false);
   };
 
-  console.log("tt" + myItemId);
   return (
     <div className="change-item-container">
       <div className="square">
@@ -111,7 +110,6 @@ const ChangeItem = ({ itemId }) => {
           )}
         </div>
         <p className="description">{itemDescription}</p>
-        <button onClick={handleSwapItemRequest}>Send Swap Request</button>
       </div>
       <div className="square">
         <h2 className="title">My Items</h2>
@@ -142,6 +140,7 @@ const ChangeItem = ({ itemId }) => {
           )}
         </div>
       </div>
+      <button onClick={handleSwapItemRequest}>Send Swap Request</button>
     </div>
   );
 };
