@@ -3,6 +3,7 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import axios from "axios";
+import { Button } from "react-bootstrap";
 
 const ChangeItem = ({ itemId }) => {
   const [wantedItemImages, setWantedItemImages] = useState([]);
@@ -111,6 +112,11 @@ const ChangeItem = ({ itemId }) => {
         </div>
         <p className="description">{itemDescription}</p>
       </div>
+      <div className="send-request-container">
+        <Button className="send-request-button" onClick={handleSwapItemRequest}>
+          Send Swap Request
+        </Button>
+      </div>
       <div className="square">
         <h2 className="title">My Items</h2>
         <div className="slider-container">
@@ -140,7 +146,6 @@ const ChangeItem = ({ itemId }) => {
           )}
         </div>
       </div>
-      <button onClick={handleSwapItemRequest}>Send Swap Request</button>
     </div>
   );
 };
