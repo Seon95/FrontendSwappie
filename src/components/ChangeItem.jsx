@@ -50,6 +50,7 @@ const ChangeItem = ({ itemId }) => {
         sender_id: senderId,
         receiver_id: receiverId,
         item_id: itemId,
+        my_item_id: 1,
       };
 
       await axios.post(
