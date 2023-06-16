@@ -25,29 +25,36 @@ const Notifications = () => {
 
   useEffect(() => {
     const fetchItemData = async () => {
-      const promises = swapRequests.map(async (request) => {
-        try {
-          const response = await axios.get(
-            `https://orca-app-ik7qo.ondigitalocean.app/api/items/${request.item_id}/user`
-          );
-          const userData = response.data.user;
-          const itemsData = JSON.parse(userData.items);
-          const item = itemsData.find((item) => item.id === request.item_id);
-          const itemName = item.name;
-          const itemImage = item.images[0];
-          return { senderName: userData.username, itemName, itemImage };
-        } catch (error) {
-          console.error("Error fetching item data:", error);
-          return { senderName: "", itemName: "", itemImage: "" };
-        }
-      });
+      const resolvedItems = await Promise.all(
+        swapRequests.map(async (request) => {
+          try {
+            const response = await axios.get(
+              `https://orca-app-ik7qo.ondigitalocean.app/api/items/${request.item_id}/user`
+            );
+            const userData = response.data.user;
+            const itemsData = JSON.parse(userData.items);
+            const item = itemsData.find((item) => item.id === request.item_id);
+            const itemName = item.name;
+            const itemImage = item.images[0];
+            return {
+              senderName: userData.username,
+              itemName,
+              itemImage,
+              myItem: request.my_item_id,
+            };
+          } catch (error) {
+            console.error("Error fetching item data:", error);
+            return {
+              senderName: "",
+              itemName: "",
+              itemImage: "",
+              myItem: request.my_item_id,
+            };
+          }
+        })
+      );
 
-      try {
-        const resolvedItems = await Promise.all(promises);
-        setItemData(resolvedItems);
-      } catch (error) {
-        console.error("Error resolving item data promises:", error);
-      }
+      setItemData(resolvedItems);
     };
 
     if (swapRequests.length > 0) {
@@ -62,13 +69,14 @@ const Notifications = () => {
         <ListGroup>
           {itemData.map((item) => (
             <ListGroup.Item key={item.senderName}>
-              {item.senderName} wants to change his {item.itemName} item for
-              your
+              {item.senderName} wants to change his {item.itemName} item for{" "}
+              {item.myItem}{" "}
               <Image
                 src={item.itemImage}
                 alt="Item"
                 style={{ width: "50px", height: "50px" }}
-              />
+              />{" "}
+              for
             </ListGroup.Item>
           ))}
         </ListGroup>
