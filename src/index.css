@@ -113,3 +113,59 @@
 .custom-container {
   padding-top: 7rem; /* Adjust the value as needed */
 }
+
+.dz-preview {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+}
+
+.dz-details {
+  display: flex;
+  flex-direction: column;
+}
+
+.dz-filename {
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.dz-size {
+  font-size: 12px;
+  color: #666;
+}
+
+.dz-progress {
+  position: relative;
+  width: 100px;
+  height: 10px;
+  background-color: #eee;
+}
+
+.dz-upload {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  background-color: #bada55;
+}
+
+.dz-success-mark,
+.dz-error-mark {
+  display: none;
+  font-size: 20px;
+}
+
+.dz-error-message {
+  color: red;
+}
+
+.dz-preview.dz-success .dz-success-mark,
+.dz-preview.dz-error .dz-error-mark {
+  display: inline-block;
+}

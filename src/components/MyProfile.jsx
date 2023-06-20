@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { Container, Card, Button, Form, Modal } from "react-bootstrap";
 import axios from "axios";
 import Dropzone from "dropzone";
+import { useDropzone } from "react-dropzone";
+
 const MyProfile = ({ userId, token }) => {
   console.log(userId + "nene");
   const [items, setItems] = useState([]);
@@ -12,6 +14,8 @@ const MyProfile = ({ userId, token }) => {
   const [quantity, setQuantity] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const [selectedImages, setSelectedImages] = useState([]); // Change this line
+
   const [editItemData, setEditItemData] = useState({
     id: "",
     name: "",
@@ -20,6 +24,15 @@ const MyProfile = ({ userId, token }) => {
     quantity: 0,
   });
 
+  const { getRootProps, getInputProps, open, acceptedFiles } = useDropzone({
+    multiple: true,
+    accept: "image/*",
+    noClick: true,
+    noKeyboard: true,
+    onDrop: (acceptedFiles) => {
+      setSelectedImages(acceptedFiles);
+    },
+  });
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -51,8 +64,10 @@ const MyProfile = ({ userId, token }) => {
       formData.append("description", description);
       formData.append("category_id", category);
       formData.append("quantity", quantity);
-      if (selectedImage) {
-        formData.append("images[]", selectedImage);
+      if (selectedImages.length) {
+        selectedImages.forEach((image, index) => {
+          formData.append(`images[${index}]`, image);
+        });
       }
 
       await axios.post(
@@ -115,10 +130,14 @@ const MyProfile = ({ userId, token }) => {
   };
 
   const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    setSelectedImage(file);
+    const files = Array.from(e.target.files);
+    setSelectedImages(files);
   };
 
+  // const handleImageChange = (e) => {
+  //   const file = e.target.files[0];
+  //   setSelectedImage(file);
+  // };
   const handleModalClose = () => {
     setShowModal(false);
     setEditItemData({
@@ -238,12 +257,46 @@ const MyProfile = ({ userId, token }) => {
             />
           </Form.Group>
           <Form.Group controlId="image">
-            <Form.Label>Image Upload</Form.Label>
-            <Form.Control
-              type="file"
-              accept="image/*"
-              onChange={handleImageChange}
-            />
+            <Form.Label>Image Upload (Select or drop your images)</Form.Label>
+
+            <div {...getRootProps()}>
+              <input {...getInputProps()} />
+              {/* <p>Drag 'n' drop some files here, or click to select files</p> */}
+              <Button onClick={open}>Select File</Button>
+            </div>
+            <aside>
+              <ul>
+                {acceptedFiles.map((file, index) => (
+                  <li key={index} className="dz-preview dz-file-preview">
+                    <div className="dz-details">
+                      <div className="dz-filename">
+                        <span data-dz-name>{file.path}</span>
+                      </div>
+                      <div className="dz-size" data-dz-size>
+                        {file.size} bytes
+                      </div>
+                      <img data-dz-thumbnail src={file.preview} alt="Preview" />
+                    </div>
+                    <div className="dz-progress">
+                      <span
+                        className="dz-upload"
+                        style={{ width: `${file.progress}%` }}
+                        data-dz-uploadprogress
+                      ></span>
+                    </div>
+                    <div className="dz-success-mark">
+                      <span>✔</span>
+                    </div>
+                    <div className="dz-error-mark">
+                      <span>✘</span>
+                    </div>
+                    <div className="dz-error-message">
+                      <span data-dz-errormessage></span>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            </aside>
           </Form.Group>
           <Button variant="success" type="submit">
             Add Item
