@@ -10,6 +10,7 @@ import Search from "./components/Search";
 import { Container, Row, Col } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import axios from "axios";
+import AboutUs from "./components/AboutUs";
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
@@ -29,6 +30,12 @@ function App() {
     localStorage.setItem("userId", data.user.id);
   };
 
+  const handleLogout = () => {
+    setLoggedIn(false);
+    setUserName("");
+    localStorage.removeItem("loggedIn");
+    localStorage.removeItem("userId");
+  };
   return (
     <Router>
       <Header
@@ -36,6 +43,7 @@ function App() {
         setToken={setToken}
         loggedIn={loggedIn}
         userName={userName}
+        handleLogout={handleLogout}
       />
       <Container>
         <Routes>
@@ -49,6 +57,7 @@ function App() {
             path="/notifications"
             element={<Notifications userId={userId} token={token} />}
           />
+          <Route path="/aboutus" element={<AboutUs />} />
         </Routes>
       </Container>
     </Router>
@@ -57,6 +66,7 @@ function App() {
 
 function HomePage() {
   const [items, setItems] = useState([]);
+  const [category, setCategory] = useState("");
 
   useEffect(() => {
     fetchData();
@@ -78,17 +88,17 @@ function HomePage() {
   return (
     <>
       <div className="categories-wrapper">
-        <Categories />
+        <Categories setCategory={setCategory} />
       </div>
       <Container style={{ maxWidth: "800px" }}>
         <Row>
           <Col>
-            <Search />
+            <Search category={category} />
           </Col>
         </Row>
         <Row className="mt-4">
           <Col>
-            <Grid items={items} />
+            <Grid items={items} category={category} />
           </Col>
         </Row>
       </Container>

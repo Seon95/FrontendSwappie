@@ -2,7 +2,8 @@ import React from "react";
 import { Form, Button, Col, Row } from "react-bootstrap";
 import "../index.css";
 
-const Search = () => {
+const Search = ({ category }) => {
+  console.log("jeeeeje" + category);
   return (
     <Form className="mt-3">
       <Row className="align-items-center" style={{ display: "flex" }}>

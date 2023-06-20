@@ -5,7 +5,13 @@ import LoginModal from "./LoginModal";
 import RegisterModal from "./RegisterModal";
 import "../index.css";
 
-const Header = ({ handleLogin, loggedIn, userName }) => {
+const Header = ({ handleLogin, handleLogout, loggedIn, userName }) => {
+  const handleLogoutClick = () => {
+    handleLogout();
+    localStorage.removeItem("loggedIn");
+    localStorage.removeItem("userName");
+  };
+
   return (
     <Navbar
       className="w-100"
@@ -29,9 +35,6 @@ const Header = ({ handleLogin, loggedIn, userName }) => {
         />
       </Navbar.Brand>
       <Nav>
-        <Nav.Link className="nav-link-spacing" href="#help">
-          Help
-        </Nav.Link>
         <Nav.Link className="nav-link-spacing" href="#chat">
           Chat
         </Nav.Link>
@@ -48,12 +51,25 @@ const Header = ({ handleLogin, loggedIn, userName }) => {
             My Profile
           </Nav.Link>
         ) : null}
+        <Nav.Link
+          as={Link}
+          to="/aboutus"
+          className="nav-link-spacing"
+          href="#aboutus"
+        >
+          About Us
+        </Nav.Link>
       </Nav>
       <ButtonGroup>
         {loggedIn ? (
-          <span style={{ marginRight: "1rem", color: "white" }}>
-            Welcome, {userName}
-          </span>
+          <>
+            <span style={{ marginRight: "1rem", color: "white" }}>
+              Welcome, {userName}
+            </span>
+            <button className="btn btn-danger" onClick={handleLogoutClick}>
+              Logout
+            </button>
+          </>
         ) : (
           <>
             <LoginModal handleLogin={handleLogin} />

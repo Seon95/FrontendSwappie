@@ -1,29 +1,44 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 
-const Categories = () => {
+const Categories = ({ setCategory }) => {
   const [selectedCategory, setSelectedCategory] = useState("");
+  const [categories, setCategories] = useState([]);
 
-  const categories = ["Category 1", "Category 2", "Category 3", "Category 4"];
+  console.log("mmm" + categories);
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await axios.get(
+          "https://orca-app-ik7qo.ondigitalocean.app/api/categories"
+        );
+        setCategories(response.data.categories);
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+      }
+    };
 
-  const handleCategoryChange = (category) => {
-    setSelectedCategory(category);
+    fetchCategories();
+  }, []);
+
+  const handleCategoryChange = (categoryId) => {
+    setSelectedCategory(categoryId);
+    setCategory(categoryId);
   };
 
   return (
     <div className="categories-wrapper">
-      {" "}
-      {/* Added categories-wrapper class */}
-      {categories.map((category, index) => (
-        <div key={index} style={{ marginBottom: "30px" }}>
+      {categories.map((category) => (
+        <div key={category.id} style={{ marginBottom: "30px" }}>
           <label>
             <input
               type="radio"
               name="category"
-              value={category}
-              checked={selectedCategory === category}
-              onChange={() => handleCategoryChange(category)}
+              value={category.id}
+              checked={selectedCategory === category.id}
+              onChange={() => handleCategoryChange(category.id)}
             />
-            {category}
+            {category.name}
           </label>
         </div>
       ))}

@@ -1,13 +1,21 @@
 import React from "react";
-import { Link, Routes, Route } from "react-router-dom";
+import { Link, Routes, Route, useNavigate } from "react-router-dom";
 import DetailPage from "./DetailPage";
 
-const Grid = ({ items }) => {
-  console.log("jeje" + JSON.stringify(items));
-
+const Grid = ({ items, category }) => {
   if (!items || items.length === 0) {
     return <div>Loading...</div>;
   }
+
+  const navigate = useNavigate();
+
+  const filteredItems = category
+    ? items.filter((item) => item.category_id === category)
+    : items;
+
+  const handleItemClick = (itemId) => {
+    navigate(`/detail/${itemId}`);
+  };
 
   return (
     <div
@@ -21,7 +29,7 @@ const Grid = ({ items }) => {
         margin: "0 auto",
       }}
     >
-      {items.map((item) => (
+      {filteredItems.map((item) => (
         <div
           key={item.id}
           style={{
@@ -51,6 +59,7 @@ const Grid = ({ items }) => {
               <div>No image available</div>
             )}
           </Link>
+          <button onClick={() => handleItemClick(item.id)}>View Details</button>
         </div>
       ))}
       <Routes>

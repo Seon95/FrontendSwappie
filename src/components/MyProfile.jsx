@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Container, Card, Button, Form, Modal } from "react-bootstrap";
 import axios from "axios";
-
+import Dropzone from "dropzone";
 const MyProfile = ({ userId, token }) => {
+  console.log(userId + "nene");
   const [items, setItems] = useState([]);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
@@ -51,7 +52,7 @@ const MyProfile = ({ userId, token }) => {
       formData.append("category_id", category);
       formData.append("quantity", quantity);
       if (selectedImage) {
-        formData.append("image", selectedImage);
+        formData.append("images[]", selectedImage);
       }
 
       await axios.post(
@@ -113,6 +114,11 @@ const MyProfile = ({ userId, token }) => {
     setShowModal(true);
   };
 
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    setSelectedImage(file);
+  };
+
   const handleModalClose = () => {
     setShowModal(false);
     setEditItemData({
@@ -171,7 +177,7 @@ const MyProfile = ({ userId, token }) => {
                 <Card.Title>{item.name}</Card.Title>
                 <Card.Text>{item.description}</Card.Text>
                 <Card.Text>{item.category}</Card.Text>
-                {item.images.length > 0 && (
+                {item.images?.length > 0 && (
                   <Card.Img
                     src={item.images[0]}
                     alt={`Image 1`}
@@ -236,7 +242,7 @@ const MyProfile = ({ userId, token }) => {
             <Form.Control
               type="file"
               accept="image/*"
-              onChange={(e) => setSelectedImage(e.target.files[0])}
+              onChange={handleImageChange}
             />
           </Form.Group>
           <Button variant="success" type="submit">
