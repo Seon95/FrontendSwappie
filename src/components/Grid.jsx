@@ -1,5 +1,6 @@
 import React from "react";
 import { Link, Routes, Route, useNavigate } from "react-router-dom";
+import { Card, Col, Container, Row } from "react-bootstrap";
 import DetailPage from "./DetailPage";
 
 const Grid = ({ items, category }) => {
@@ -18,54 +19,71 @@ const Grid = ({ items, category }) => {
   };
 
   return (
-    <div
-      style={{
-        display: "grid",
-        marginTop: "20px",
-        gridTemplateColumns: "repeat(3, 1fr)",
-        gap: "20px",
-        padding: "0",
-        maxWidth: "900px",
-        margin: "0 auto",
-      }}
-    >
-      {filteredItems.map((item) => (
-        <div
-          key={item.id}
-          style={{
-            maxWidth: "250px",
-            maxHeight: "270px",
-            margin: "0",
-            padding: "0",
-            width: "100%",
-          }}
-        >
-          <Link to={`/detail/${item.id}`}>
-            {item.images && item.images.length > 0 ? (
-              <img
-                src={item.images[0]}
-                alt={`image-${item.id}`}
+    <Container fluid>
+      <Row
+        className="mt-4"
+        xs={1}
+        sm={2}
+        md={3}
+        lg={3}
+        xl={3}
+        gap={4}
+        style={{ marginRight: "-100px" }}
+      >
+        {filteredItems.map((item) => {
+          const images = JSON.parse(item.images);
+          const filename =
+            images.length > 0 ? images[0].match(/[^_]+$/)[0] : "";
+
+          console.log("filename:", filename); // Log the filename
+
+          return (
+            <Col key={item.id} className="mb-3">
+              <Card
                 style={{
-                  display: "block",
-                  width: "100%",
-                  height: "auto",
-                  objectFit: "cover",
-                  margin: "0",
-                  padding: "0",
-                  marginBottom: "30px",
+                  width: "255px",
+                  height: "300px",
                 }}
-              />
-            ) : (
-              <div>No image available</div>
-            )}
-          </Link>
-          <button onClick={() => handleItemClick(item.id)}>View Details</button>
-        </div>
-      ))}
+              >
+                <Link to={`/detail/${item.id}`}>
+                  {item.images && item.images.length > 0 ? (
+                    <div
+                      style={{
+                        width: "250px",
+                        height: "250px",
+                        overflow: "hidden",
+                      }}
+                    >
+                      <Card.Img
+                        src={filename}
+                        alt={`image-${item.id}`}
+                        style={{
+                          width: "100%",
+                          height: "100%",
+                          objectFit: "cover",
+                        }}
+                      />
+                    </div>
+                  ) : (
+                    <div>No image available</div>
+                  )}
+                </Link>
+                <Card.Body>
+                  <Card.Text>{item.description}</Card.Text>{" "}
+                  {/* Display the item description */}
+                  {/* <Button variant="primary" onClick={() => handleItemClick(item.id)}>
+                    View Details
+                  </Button> */}
+                </Card.Body>
+              </Card>
+            </Col>
+          );
+        })}
+      </Row>
       <Routes>
         <Route path="/detail/:id" element={<DetailPage />} />
       </Routes>
-    </div>
+    </Container>
   );
 };
 

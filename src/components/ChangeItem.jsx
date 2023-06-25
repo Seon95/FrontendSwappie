@@ -27,8 +27,14 @@ const ChangeItem = ({ itemId }) => {
         );
 
         if (wantedItem) {
-          const wantedItemImages = wantedItem.images.flat();
-          setWantedItemImages(wantedItemImages);
+          const wantedItemImages = JSON.parse(wantedItem.images); // Parse the images array
+          const formattedImages = wantedItemImages.map(
+            (image) => image.substring(image.indexOf("_") + 1) // Remove everything before the underscore
+          );
+
+          setWantedItemImages(formattedImages);
+          console.log("e" + formattedImages);
+
           setItemDescription(wantedItem.description);
         } else {
           console.error("Error: Wanted item not found.");
@@ -44,10 +50,12 @@ const ChangeItem = ({ itemId }) => {
           `https://orca-app-ik7qo.ondigitalocean.app/api/users/${userId}`
         );
         const userItemsData = userItemsResponse.data.items;
+
         const userItemImages = userItemsData.map((item) => ({
           id: item.id,
-          images: item.images.flat(),
+          images: item.images,
         }));
+
         setMyItemImages(userItemImages);
       } catch (error) {
         console.error("Error fetching item data:", error);
@@ -93,7 +101,6 @@ const ChangeItem = ({ itemId }) => {
     setMyItemId(id);
     setIsSliderEnabled(false);
   };
-
   return (
     <div className="change-item-container">
       <div className="square">
@@ -133,20 +140,27 @@ const ChangeItem = ({ itemId }) => {
             <Slider {...sliderSettings} disabled={!isSliderEnabled}>
               {myItemImages.map((item, index) => (
                 <div key={item.id} className="slider-image-container">
-                  {item.images.map((image, imageIndex) => (
-                    <div key={imageIndex} className="my-item">
-                      <img
-                        className="slider-image"
-                        src={"/" + image}
-                        alt={`My Item ${index}`}
-                      />
-                      {isSliderEnabled && (
-                        <button onClick={() => handleMyItemSelection(item.id)}>
-                          Select
-                        </button>
-                      )}
-                    </div>
-                  ))}
+                  {JSON.parse(item.images).map((image, imageIndex) => {
+                    const imageName = image.substring(image.indexOf("_") + 1); // Remove everything before the underscore
+                    if (imageIndex === 0) {
+                      return (
+                        <div key={imageIndex} className="my-item">
+                          <img
+                            className="slider-image"
+                            src={"/" + imageName}
+                            alt={`My Item ${index}`}
+                          />
+                          {isSliderEnabled && (
+                            <button
+                              onClick={() => handleMyItemSelection(item.id)}
+                            >
+                              Select
+                            </button>
+                          )}
+                        </div>
+                      );
+                    }
+                  })}
                 </div>
               ))}
             </Slider>

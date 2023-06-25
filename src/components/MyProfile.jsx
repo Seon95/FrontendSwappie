@@ -120,12 +120,13 @@ const MyProfile = ({ userId, token }) => {
   const handleEditItem = (item) => {
     setEditItemData({
       id: item.id,
-
       name: item.name,
       description: item.description,
       category: item.category_id,
       quantity: item.quantity,
     });
+    setSelectedImages(item.images); // Set selectedImages with existing item images
+
     setShowModal(true);
   };
 
@@ -185,38 +186,52 @@ const MyProfile = ({ userId, token }) => {
     }
   };
 
+  console.log("s" + items);
+  items.map((item) => console.log("tt" + item.images));
+
   return (
     <Container>
       {items.length > 0 && (
         <div>
           <h2>Item Details</h2>
-          {items.map((item) => (
-            <Card key={item.id} className="mb-3">
-              <Card.Body>
-                <Card.Title>{item.name}</Card.Title>
-                <Card.Text>{item.description}</Card.Text>
-                <Card.Text>{item.category}</Card.Text>
-                {item.images?.length > 0 && (
-                  <Card.Img
-                    src={item.images[0]}
-                    alt={`Image 1`}
-                    className="img-fluid"
-                    style={{ width: "70px", height: "70px" }}
-                  />
-                )}
-                <Button
-                  variant="danger"
-                  className="mr-2"
-                  onClick={() => handleDeleteItem(item.id)}
-                >
-                  Delete
-                </Button>
-                <Button variant="primary" onClick={() => handleEditItem(item)}>
-                  Edit
-                </Button>
-              </Card.Body>
-            </Card>
-          ))}
+          {items.map((item) => {
+            const imagesArray = JSON.parse(item.images); // Parse the string into an array
+            const imgSrc =
+              imagesArray && imagesArray.length > 0
+                ? imagesArray[0].split("_")[1]
+                : null;
+            console.log("Image src:", imgSrc);
+            return (
+              <Card key={item.id} className="mb-3">
+                <Card.Body>
+                  <Card.Title>{item.name}</Card.Title>
+                  <Card.Text>{item.description}</Card.Text>
+                  <Card.Text>{item.category}</Card.Text>
+                  {imgSrc && (
+                    <Card.Img
+                      src={`/${imgSrc}`}
+                      alt={`Image 1`}
+                      className="img-fluid"
+                      style={{ width: "70px", height: "70px" }}
+                    />
+                  )}
+                  <Button
+                    variant="danger"
+                    className="mr-2"
+                    onClick={() => handleDeleteItem(item.id)}
+                  >
+                    Delete
+                  </Button>
+                  <Button
+                    variant="primary"
+                    onClick={() => handleEditItem(item)}
+                  >
+                    Edit
+                  </Button>
+                </Card.Body>
+              </Card>
+            );
+          })}
         </div>
       )}
 

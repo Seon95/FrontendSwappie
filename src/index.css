@@ -169,3 +169,10 @@
 .dz-preview.dz-error .dz-error-mark {
   display: inline-block;
 }
+
+.custom-label {
+  font-weight: 400;
+  color: black;
+  font-family: Arial, Helvetica, sans-serif;
+  /* Add any other styles as needed */
+}

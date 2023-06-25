@@ -15,27 +15,34 @@ const Header = ({ handleLogin, handleLogout, loggedIn, userName }) => {
   return (
     <Navbar
       className="w-100"
-      bg="dark"
-      variant="dark"
       expand="lg"
       style={{
-        padding: "0.5rem 1rem",
-        border: "3px solid blue",
+        padding: "1rem 2rem",
+        border: "1px solid #2DC0D1",
         display: "flex",
         justifyContent: "space-between",
+        backgroundColor: "black",
+        fontFamily: "Clarkson, Helvetica, sans-serif", // Set the font family
+        fontSize: "18px",
+        color: "white",
       }}
     >
-      <Navbar.Brand as={Link} to="/" style={{ marginRight: "2rem" }}>
-        <img
+      SWAPPIE
+      <Navbar.Brand as={Link} to="/">
+        {/* <img
           src="/src/assets/logo.png"
           width="50"
           height="50"
           className="d-inline-block align-top"
           alt="Logo"
-        />
+        /> */}
       </Navbar.Brand>
       <Nav>
-        <Nav.Link className="nav-link-spacing" href="#chat">
+        <Nav.Link
+          className="nav-link-spacing"
+          href="#chat"
+          style={{ color: "white" }}
+        >
           Chat
         </Nav.Link>
         <Nav.Link
@@ -43,11 +50,17 @@ const Header = ({ handleLogin, handleLogout, loggedIn, userName }) => {
           to="/notifications"
           className="nav-link-spacing"
           href="#notifications"
+          style={{ color: "white", paddingRight: "50px", paddingLeft: "50px" }}
         >
           Notifications
         </Nav.Link>
         {loggedIn ? (
-          <Nav.Link as={Link} to="/myprofile" className="nav-link-spacing">
+          <Nav.Link
+            as={Link}
+            to="/myprofile"
+            className="nav-link-spacing"
+            style={{ color: "white" }}
+          >
             My Profile
           </Nav.Link>
         ) : null}
@@ -56,6 +69,7 @@ const Header = ({ handleLogin, handleLogout, loggedIn, userName }) => {
           to="/aboutus"
           className="nav-link-spacing"
           href="#aboutus"
+          style={{ color: "white" }}
         >
           About Us
         </Nav.Link>

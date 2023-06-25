@@ -11,6 +11,8 @@ import { Container, Row, Col } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import axios from "axios";
 import AboutUs from "./components/AboutUs";
+import "./index.css";
+import "./app.css";
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);

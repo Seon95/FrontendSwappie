@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { Form, Col } from "react-bootstrap";
 
 const Categories = ({ setCategory }) => {
   const [selectedCategory, setSelectedCategory] = useState("");
   const [categories, setCategories] = useState([]);
 
-  console.log("mmm" + categories);
   useEffect(() => {
     const fetchCategories = async () => {
       try {
@@ -28,20 +28,29 @@ const Categories = ({ setCategory }) => {
 
   return (
     <div className="categories-wrapper">
-      {categories.map((category) => (
-        <div key={category.id} style={{ marginBottom: "30px" }}>
-          <label>
-            <input
+      <h3 style={{ marginBottom: "20px", textDecoration: "underline" }}>
+        Categories
+      </h3>
+      <Form>
+        <Form.Group>
+          {categories.map((category) => (
+            <Form.Check
+              key={category.id}
               type="radio"
-              name="category"
+              id={`category-${category.id}`}
+              label={
+                <Form.Check.Label className="custom-label">
+                  {category.name}
+                </Form.Check.Label>
+              }
               value={category.id}
               checked={selectedCategory === category.id}
               onChange={() => handleCategoryChange(category.id)}
+              style={{ marginBottom: "10px" }}
             />
-            {category.name}
-          </label>
-        </div>
-      ))}
+          ))}
+        </Form.Group>
+      </Form>
     </div>
   );
 };

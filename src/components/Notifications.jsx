@@ -43,13 +43,16 @@ const Notifications = () => {
               `https://orca-app-ik7qo.ondigitalocean.app/api/items/${request.my_item_id}/user`
             );
             const myItemUserData = myItemResponse.data.user;
-            const myItemItemsData = JSON.parse(myItemUserData.items);
-            const myItem = myItemItemsData.find(
+            const myItemsData = JSON.parse(myItemUserData.items);
+            const myItem = myItemsData.find(
               (item) => item.id === request.my_item_id
             );
             const myItemName = myItem.name;
 
-            const itemImage = item.images[0];
+            // Parse the images JSON string into an array
+            const itemImages = JSON.parse(item.images);
+            const itemImage = itemImages[0];
+
             return {
               senderName: userData.username,
               itemName,
@@ -60,6 +63,7 @@ const Notifications = () => {
             };
           } catch (error) {
             console.error("Error fetching item data:", error);
+
             return {
               senderName: "",
               itemName: "",
@@ -102,6 +106,7 @@ const Notifications = () => {
     }
   };
 
+  itemData.map((item) => console.log(item.itemImage));
   return (
     <div>
       <h2>Swap Item Requests</h2>
@@ -112,7 +117,9 @@ const Notifications = () => {
               <u>{item.senderName}</u> wants to change his{" "}
               <u>{item.itemName}</u> item for your item <u>{item.myItemName}</u>{" "}
               <Image
-                src={item.itemImage}
+                src={item.itemImage.substring(
+                  item.itemImage.lastIndexOf("_") + 1
+                )}
                 alt="Item"
                 style={{ width: "50px", height: "50px", cursor: "pointer" }}
                 onClick={() => handleImageClick(item)}
@@ -145,7 +152,9 @@ const Notifications = () => {
           {selectedItem && (
             <>
               <Image
-                src={selectedItem.itemImage}
+                src={selectedItem.itemImage.substring(
+                  selectedItem.itemImage.lastIndexOf("_") + 1
+                )}
                 alt="Selected Item"
                 style={{ width: "100%" }}
               />
