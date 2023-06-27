@@ -15,12 +15,7 @@ html {
 }
 
 body {
-  background-image: linear-gradient(
-    to right top,
-    #2dc0d1,
-    #6dccd2,
-    #98d8d6,
-    #bce3de,
-    #deeeea
-  );
+  background-image: url(./assets/background.svg);
+  background-repeat: no-repeat;
+  background-size: cover;
 }

@@ -28,9 +28,9 @@ const Categories = ({ setCategory }) => {
 
   return (
     <div className="categories-wrapper">
-      <h3 style={{ marginBottom: "20px", textDecoration: "underline" }}>
+      {/* <h3 style={{ marginBottom: "20px", textDecoration: "underline" }}>
         Categories
-      </h3>
+      </h3> */}
       <Form>
         <Form.Group>
           {categories.map((category) => (
@@ -39,7 +39,14 @@ const Categories = ({ setCategory }) => {
               type="radio"
               id={`category-${category.id}`}
               label={
-                <Form.Check.Label className="custom-label">
+                <Form.Check.Label
+                  className="custom-label"
+                  style={{
+                    marginBottom: "20px",
+                    fontWeight: 500,
+                    fontSize: "17px",
+                  }}
+                >
                   {category.name}
                 </Form.Check.Label>
               }

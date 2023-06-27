@@ -3,10 +3,10 @@ import { Container, Row, Col } from "react-bootstrap";
 
 const AboutUs = () => {
   return (
-    <Container>
+    <Container style={{ marginTop: "50px" }}>
       <Row>
         <Col>
-          <h2>About Us</h2>
+          <h2 style={{ marginBottom: "30px" }}>About Us</h2>
           <p>
             At OurSwap, we're on a mission to promote sustainable living through
             easy and rewarding item swapping. Our platform connects people who

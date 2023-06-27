@@ -23,6 +23,15 @@ function App() {
   const [rerender, setRerender] = useState(0);
   const [items, setItems] = useState([]);
 
+  useEffect(() => {
+    // Check if the userId exists in localStorage
+    const storedUserId = localStorage.getItem("userId");
+    if (storedUserId) {
+      setUserId(storedUserId);
+      setLoggedIn(true);
+    }
+  }, []);
+
   const handleLogin = (data) => {
     setLoggedIn(true);
     setUserId(data.user.id);
@@ -30,6 +39,8 @@ function App() {
     setUserEmail(data.user.email);
     setToken(data.token);
     localStorage.setItem("userId", data.user.id);
+    localStorage.setItem("token", data.token);
+    localStorage.setItem("userName", data.user.username);
   };
 
   const handleLogout = () => {
@@ -92,7 +103,7 @@ function HomePage() {
       <div className="categories-wrapper">
         <Categories setCategory={setCategory} />
       </div>
-      <Container style={{ maxWidth: "800px" }}>
+      <Container>
         <Row>
           <Col>
             <Search category={category} />

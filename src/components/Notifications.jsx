@@ -13,7 +13,8 @@ const Notifications = () => {
       try {
         const userId = localStorage.getItem("userId");
         const response = await axios.get(
-          `https://orca-app-ik7qo.ondigitalocean.app/api/users/${userId}/swap-requests`
+          // `https://orca-app-ik7qo.ondigitalocean.app/api/users/${userId}/swap-requests`
+          `https://orca-app-ik7qo.ondigitalocean.app/api/swap-requests/${userId}`
         );
         const swapRequestsData = response.data;
         setSwapRequests(swapRequestsData);
@@ -31,16 +32,19 @@ const Notifications = () => {
         swapRequests.map(async (request) => {
           try {
             const response = await axios.get(
-              `https://orca-app-ik7qo.ondigitalocean.app/api/items/${request.item_id}/user`
+              // `https://orca-app-ik7qo.ondigitalocean.app/api/items/${request.item_id}/user`
+              `https://orca-app-ik7qo.ondigitalocean.app/api/user/${request.item_id}`
             );
             const userData = response.data.user;
+            console.log(userData + "jj");
             const itemsData = JSON.parse(userData.items);
             const item = itemsData.find((item) => item.id === request.item_id);
             const itemName = item.name;
             const reqId = request.id;
 
             const myItemResponse = await axios.get(
-              `https://orca-app-ik7qo.ondigitalocean.app/api/items/${request.my_item_id}/user`
+              // `https://orca-app-ik7qo.ondigitalocean.app/api/items/${request.my_item_id}/user`
+              `https://orca-app-ik7qo.ondigitalocean.app/api/user/${request.my_item_id}`
             );
             const myItemUserData = myItemResponse.data.user;
             const myItemsData = JSON.parse(myItemUserData.items);
@@ -106,37 +110,62 @@ const Notifications = () => {
     }
   };
 
-  itemData.map((item) => console.log(item.itemImage));
   return (
     <div>
-      <h2>Swap Item Requests</h2>
+      <h2 style={{ padding: "30px 0px" }}>Swap Item Requests</h2>
       {swapRequests.length > 0 ? (
         <ListGroup>
           {itemData.map((item) => (
-            <ListGroup.Item key={item.senderName}>
-              <u>{item.senderName}</u> wants to change his{" "}
-              <u>{item.itemName}</u> item for your item <u>{item.myItemName}</u>{" "}
-              <Image
-                src={item.itemImage.substring(
-                  item.itemImage.lastIndexOf("_") + 1
-                )}
-                alt="Item"
-                style={{ width: "50px", height: "50px", cursor: "pointer" }}
-                onClick={() => handleImageClick(item)}
-              />
-              <Button
-                variant="success"
-                className="mr-2"
-                onClick={() => handleAcceptRequest(item)}
-              >
-                Accept
-              </Button>
-              <Button
-                variant="danger"
-                onClick={() => handleRejectRequest(item)}
-              >
-                Reject
-              </Button>
+            <ListGroup.Item
+              key={item.senderName}
+              style={{
+                fontSize: "18px",
+                backgroundColor: "#D1F9FB",
+                borderRadius: "10px",
+                display: "grid",
+                gridTemplateColumns: "auto 1fr auto", // Image - Text - Buttons
+                alignItems: "center", // Center items vertically
+                gap: "20px",
+                marginBottom: "20px",
+                backgroundColor: "transparent",
+                borderColor: "black",
+              }}
+            >
+              <div>
+                <u>{item.senderName}</u> wants to change his{" "}
+                <u>{item.itemName}</u> item for your item{" "}
+                <u>{item.myItemName}</u>
+              </div>
+              <div>
+                <Image
+                  src={item.itemImage.substring(
+                    item.itemImage.lastIndexOf("_") + 1
+                  )}
+                  alt="Item"
+                  style={{
+                    width: "100px",
+                    height: "100px",
+                    cursor: "pointer",
+                  }}
+                  onClick={() => handleImageClick(item)}
+                />
+              </div>
+              <div style={{ justifySelf: "end" }}>
+                <Button
+                  variant="success"
+                  className="mr-2"
+                  onClick={() => handleAcceptRequest(item)}
+                  style={{ backgroundColor: "#0d6efd" }}
+                >
+                  Accept
+                </Button>
+                <Button
+                  variant="danger"
+                  onClick={() => handleRejectRequest(item)}
+                >
+                  Reject
+                </Button>
+              </div>
             </ListGroup.Item>
           ))}
         </ListGroup>

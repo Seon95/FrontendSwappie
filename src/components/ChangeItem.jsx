@@ -13,12 +13,14 @@ const ChangeItem = ({ itemId }) => {
   const [myItemId, setMyItemId] = useState("");
   const [isSliderEnabled, setIsSliderEnabled] = useState(true);
   const [isButtonClickable, setIsButtonClickable] = useState(false);
+  const [itemName, setItemName] = useState("");
 
   useEffect(() => {
     const fetchItemData = async () => {
       try {
         const wantedItemResponse = await axios.get(
-          `https://orca-app-ik7qo.ondigitalocean.app/api/items/${itemId}/user`
+          // `https://orca-app-ik7qo.ondigitalocean.app/api/items/${itemId}/user`
+          `https://orca-app-ik7qo.ondigitalocean.app/api/user/${itemId}`
         );
         const wantedItemData = JSON.parse(wantedItemResponse.data.user.items);
         console.log(wantedItemData);
@@ -36,12 +38,14 @@ const ChangeItem = ({ itemId }) => {
           console.log("e" + formattedImages);
 
           setItemDescription(wantedItem.description);
+          setItemName(wantedItem.name);
         } else {
           console.error("Error: Wanted item not found.");
         }
 
         const receiverResponse = await axios.get(
-          `https://orca-app-ik7qo.ondigitalocean.app/api/items/${itemId}/user`
+          // `https://orca-app-ik7qo.ondigitalocean.app/api/items/${itemId}/user`
+          `https://orca-app-ik7qo.ondigitalocean.app/api/user/${itemId}`
         );
         setReceiverId(receiverResponse.data.user.id);
 
@@ -97,17 +101,19 @@ const ChangeItem = ({ itemId }) => {
     slidesToScroll: 1,
     arrows: true,
   };
+
   const handleMyItemSelection = (id) => {
     setMyItemId(id);
     setIsSliderEnabled(false);
   };
+
   return (
     <div className="change-item-container">
       <div className="square">
         <h2 className="title">Wanted item</h2>
         <div className="slider-container">
           {wantedItemImages.length > 0 ? (
-            <Slider {...sliderSettings}>
+            <Slider>
               {wantedItemImages.map((image, index) => (
                 <div key={index} className="slider-image-container">
                   <img
@@ -122,6 +128,7 @@ const ChangeItem = ({ itemId }) => {
             <p>Loading...</p>
           )}
         </div>
+        <p className="name">{itemName}</p>
         <p className="description">{itemDescription}</p>
       </div>
       <div className="send-request-container">
@@ -129,6 +136,7 @@ const ChangeItem = ({ itemId }) => {
           className="send-request-button"
           onClick={handleSwapItemRequest}
           disabled={!isButtonClickable}
+          style={{ backgroundColor: "black" }}
         >
           Send Swap Request
         </Button>
@@ -137,7 +145,7 @@ const ChangeItem = ({ itemId }) => {
         <h2 className="title">My Items</h2>
         <div className="slider-container">
           {myItemImages.length > 0 ? (
-            <Slider {...sliderSettings} disabled={!isSliderEnabled}>
+            <Slider>
               {myItemImages.map((item, index) => (
                 <div key={item.id} className="slider-image-container">
                   {JSON.parse(item.images).map((image, imageIndex) => {
@@ -150,9 +158,11 @@ const ChangeItem = ({ itemId }) => {
                             src={"/" + imageName}
                             alt={`My Item ${index}`}
                           />
+
                           {isSliderEnabled && (
                             <button
                               onClick={() => handleMyItemSelection(item.id)}
+                              className="select-button"
                             >
                               Select
                             </button>

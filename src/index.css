@@ -15,7 +15,6 @@
   width: 100%;
   max-width: 500px;
   height: 400px;
-  border: 1px solid black;
   padding: 20px;
   box-sizing: border-box;
   display: flex;
@@ -90,7 +89,6 @@
 }
 
 .send-request-button {
-  background-color: blue;
   color: white;
   padding: 10px 20px;
   border: none;
@@ -175,4 +173,109 @@
   color: black;
   font-family: Arial, Helvetica, sans-serif;
   /* Add any other styles as needed */
+}
+
+/* ChangeItem.css */
+
+.change-item-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  /* gap: 20px; */
+}
+
+.square {
+  width: 500px;
+  background-color: #000000;
+  padding: 50px;
+  border-radius: 1rem;
+  color: white;
+}
+
+.title {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.slider-container {
+  margin-bottom: 60px;
+}
+
+.description {
+  margin-bottom: 0;
+  font-size: 19px;
+  font-weight: 500;
+}
+
+.send-request-button {
+  display: block;
+  width: 100%;
+  margin-top: 10px;
+}
+
+.my-item {
+  position: relative;
+  display: inline-block;
+  margin-right: 10px;
+}
+
+.select-button {
+  position: relative;
+  margin-top: 10px;
+  transform: translateX(-50%);
+  padding: 5px 10px;
+  background-color: rgb(196, 81, 81);
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.select-button:hover {
+  background-color: #0056b3;
+}
+
+.slider-image {
+  width: 250px;
+  height: 250px;
+  object-position: center;
+  object-fit: cover;
+}
+@media screen and (max-width: 600px) {
+  .change-item-container {
+    flex-direction: column;
+  }
+
+  .square {
+    width: 100%;
+  }
+
+  .my-item {
+    margin-right: 0;
+    margin-bottom: 10px;
+  }
+}
+
+/* ChangeItem.css */
+
+/* ...existing styles... */
+
+.card-body {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+}
+
+.cardStyle {
+  display: flex;
+  justify-content: space-around;
+}
+
+.titleMyProfile,
+.AddItemTitle {
+  margin-top: 10px;
+  font-size: 25px;
+  font-weight: 500;
+  font-family: Arial, Helvetica, sans-serif;
 }
