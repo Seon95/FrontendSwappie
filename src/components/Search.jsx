@@ -3,8 +3,7 @@ import { Form, Button, Col, Row } from "react-bootstrap";
 import axios from "axios";
 import "../index.css";
 
-const Search = () => {
-  const [categories, setCategories] = useState([]);
+const Search = ({ categories }) => {
   const [searchName, setSearchName] = useState("");
 
   const handleSearch = async (e) => {
@@ -26,21 +25,6 @@ const Search = () => {
       console.error("Error searching items:", error);
     }
   };
-
-  useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const response = await axios.get(
-          "https://orca-app-ik7qo.ondigitalocean.app/api/categories"
-        );
-        setCategories(response.data.categories);
-      } catch (error) {
-        console.error("Error fetching categories:", error);
-      }
-    };
-
-    fetchCategories();
-  }, []);
 
   return (
     <Form className="mt-3" onSubmit={handleSearch}>

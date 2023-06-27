@@ -13,8 +13,8 @@
 .square {
   flex: 1;
   width: 100%;
-  max-width: 500px;
-  height: 400px;
+  max-width: 600px;
+  height: 450px;
   padding: 20px;
   box-sizing: border-box;
   display: flex;
@@ -35,20 +35,22 @@
 }
 
 .image {
-  width: 200px;
-  height: 200px;
+  width: 250px;
+  height: 250px;
   object-fit: cover;
   object-position: center;
   margin-bottom: 10px;
 }
 
 .slider-container {
-  width: 200px;
-  height: 200px;
+  width: 250px;
+  height: 250px;
   position: relative;
-  margin: 30px 0;
 }
-
+.title {
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
 .slider-image-container {
   display: flex;
   justify-content: center;
@@ -186,7 +188,7 @@
 }
 
 .square {
-  width: 500px;
+  width: 600px;
   background-color: #000000;
   padding: 50px;
   border-radius: 1rem;
@@ -196,10 +198,6 @@
 .title {
   font-size: 18px;
   font-weight: bold;
-}
-
-.slider-container {
-  margin-bottom: 60px;
 }
 
 .description {
@@ -222,8 +220,7 @@
 
 .select-button {
   position: relative;
-  margin-top: 10px;
-  transform: translateX(-50%);
+  margin-top: 25px;
   padding: 5px 10px;
   background-color: rgb(196, 81, 81);
   color: #fff;
@@ -233,7 +230,8 @@
 }
 
 .select-button:hover {
-  background-color: #0056b3;
+  background-color: white;
+  color: rgb(196, 81, 81);
 }
 
 .slider-image {
@@ -278,4 +276,20 @@
   font-size: 25px;
   font-weight: 500;
   font-family: Arial, Helvetica, sans-serif;
+}
+
+.infobox {
+  font-size: 20px;
+  font-weight: 500;
+}
+.send-request-container {
+  margin-right: 15px;
+}
+
+.square:last-child {
+  margin-left: 10px;
+}
+
+.ItemName {
+  margin-top: 40px;
 }

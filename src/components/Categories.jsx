@@ -2,24 +2,8 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Form, Col } from "react-bootstrap";
 
-const Categories = ({ setCategory }) => {
+const Categories = ({ setCategory, categories }) => {
   const [selectedCategory, setSelectedCategory] = useState("");
-  const [categories, setCategories] = useState([]);
-
-  useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const response = await axios.get(
-          "https://orca-app-ik7qo.ondigitalocean.app/api/categories"
-        );
-        setCategories(response.data.categories);
-      } catch (error) {
-        console.error("Error fetching categories:", error);
-      }
-    };
-
-    fetchCategories();
-  }, []);
 
   const handleCategoryChange = (categoryId) => {
     setSelectedCategory(categoryId);

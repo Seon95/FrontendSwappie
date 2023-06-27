@@ -14,6 +14,7 @@ const ChangeItem = ({ itemId }) => {
   const [isSliderEnabled, setIsSliderEnabled] = useState(true);
   const [isButtonClickable, setIsButtonClickable] = useState(false);
   const [itemName, setItemName] = useState("");
+  const token = localStorage.getItem("token"); // Retrieve the token from localStorage
 
   useEffect(() => {
     const fetchItemData = async () => {
@@ -82,10 +83,17 @@ const ChangeItem = ({ itemId }) => {
         item_id: itemId,
         my_item_id: myItemId,
       };
+
       await axios.post(
         "https://orca-app-ik7qo.ondigitalocean.app/api/swap-requests",
-        requestPayload
+        requestPayload,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
+
       alert("Swap item request sent successfully!");
     } catch (error) {
       console.error("Error sending swap item request:", error);
@@ -128,8 +136,10 @@ const ChangeItem = ({ itemId }) => {
             <p>Loading...</p>
           )}
         </div>
-        <p className="name">{itemName}</p>
-        <p className="description">{itemDescription}</p>
+        <div className="infobox" style={{ marginBottom: "10px" }}>
+          <p className="name">{itemName}</p>
+          <p className="description">{itemDescription}</p>
+        </div>
       </div>
       <div className="send-request-container">
         <Button
@@ -177,6 +187,10 @@ const ChangeItem = ({ itemId }) => {
           ) : (
             <p>No items found.</p>
           )}
+        </div>
+        <div className="infobox">
+          <p style={{ color: "black" }}>.</p>
+          <p className="ItemName">{itemName}</p>
         </div>
       </div>
     </div>

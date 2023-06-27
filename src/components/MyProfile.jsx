@@ -5,7 +5,7 @@ import axios from "axios";
 import Dropzone from "dropzone";
 import { useDropzone } from "react-dropzone";
 
-const MyProfile = ({ userId, token }) => {
+const MyProfile = ({ userId }) => {
   console.log(userId + "nene");
   const [items, setItems] = useState([]);
   const [name, setName] = useState("");
@@ -17,6 +17,23 @@ const MyProfile = ({ userId, token }) => {
   const [showAddModal, setShowAddModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [selectedImages, setSelectedImages] = useState([]);
+  const token = localStorage.getItem("token"); // Retrieve the token from localStorage
+  const [categories, setCategories] = useState([]);
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await axios.get(
+          "https://orca-app-ik7qo.ondigitalocean.app/api/categories"
+        );
+        setCategories(response.data.categories);
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+      }
+    };
+
+    fetchCategories();
+  }, []);
 
   const [editItemData, setEditItemData] = useState({
     id: "",
@@ -38,10 +55,21 @@ const MyProfile = ({ userId, token }) => {
   console.log("userid" + userId);
 
   useEffect(() => {
+    if (!userId) {
+      return;
+    }
+
     const fetchData = async () => {
+      const token = localStorage.getItem("token"); // Retrieve the token from localStorage
+
       try {
         const response = await axios.get(
-          `https://orca-app-ik7qo.ondigitalocean.app/api/users/${userId}`
+          `https://orca-app-ik7qo.ondigitalocean.app/api/users/${userId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
         );
         setItems(response.data.items);
         console.log(token);
@@ -87,7 +115,12 @@ const MyProfile = ({ userId, token }) => {
       );
 
       const response = await axios.get(
-        `https://orca-app-ik7qo.ondigitalocean.app/api/users/${userId}`
+        `https://orca-app-ik7qo.ondigitalocean.app/api/users/${userId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
 
       setItems(response.data.items);
@@ -96,7 +129,7 @@ const MyProfile = ({ userId, token }) => {
       setCategory("");
       setSelectedImage(null);
       setQuantity(0);
-      console.log(token);
+      setShowAddModal(false); // Close the modal after successfully adding the item
     } catch (error) {
       console.error("Error adding item:", error);
     } finally {
@@ -106,6 +139,8 @@ const MyProfile = ({ userId, token }) => {
 
   const handleDeleteItem = async (itemId) => {
     try {
+      const token = localStorage.getItem("token"); // Retrieve the token from localStorage
+
       await axios.delete(
         `https://orca-app-ik7qo.ondigitalocean.app/api/items/${userId}/${itemId}`,
         {
@@ -177,7 +212,6 @@ const MyProfile = ({ userId, token }) => {
           },
         }
       );
-
       const response = await axios.get(
         `https://orca-app-ik7qo.ondigitalocean.app/api/users/${userId}`
       );
@@ -197,10 +231,10 @@ const MyProfile = ({ userId, token }) => {
     }
   };
 
-  console.log("tokensito" + token);
+  console.log("tokensito" + localStorage.getItem("token"));
 
   return (
-    <Container>
+    <Container style={{ maxWidth: "1000px" }}>
       <h2 className="titleMyProfile">Item Details</h2>
 
       {items.length > 0 && (
@@ -221,7 +255,13 @@ const MyProfile = ({ userId, token }) => {
                   borderColor: "black",
                 }}
               >
-                <Card.Body className="item-details">
+                <Card.Body
+                  className="item-details"
+                  style={{
+                    display: "grid",
+                    gridTemplateColumns: "auto 1fr auto",
+                  }}
+                >
                   <div className="item-details-image">
                     {imgSrc && (
                       <Card.Img
@@ -247,7 +287,7 @@ const MyProfile = ({ userId, token }) => {
                     <Button
                       variant="primary"
                       onClick={() => handleEditItem(item)}
-                      style={{}}
+                      style={{ backgroundColor: "black", borderColor: "black" }}
                     >
                       <FaEdit />
                     </Button>
@@ -296,10 +336,17 @@ const MyProfile = ({ userId, token }) => {
             <Form.Group controlId="category">
               <Form.Label>Category</Form.Label>
               <Form.Control
-                type="text"
+                as="select"
                 value={category}
                 onChange={(e) => setCategory(e.target.value)}
-              />
+              >
+                <option value="">Select a category</option>
+                {categories.map((category) => (
+                  <option key={category.id} value={category.id}>
+                    {category.name}
+                  </option>
+                ))}
+              </Form.Control>
             </Form.Group>
             <Form.Group controlId="quantity">
               <Form.Label>Quantity</Form.Label>

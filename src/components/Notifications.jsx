@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { ListGroup, Image, Modal, Button } from "react-bootstrap";
+import { ListGroup, Image, Modal, Button, Container } from "react-bootstrap";
 
 const Notifications = () => {
   const [swapRequests, setSwapRequests] = useState([]);
   const [itemData, setItemData] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
+  const token = localStorage.getItem("token"); // Retrieve the token from localStorage
 
   useEffect(() => {
     const fetchSwapRequests = async () => {
@@ -99,11 +100,20 @@ const Notifications = () => {
   const handleAcceptRequest = (item) => {
     console.log("Accepting swap request:", item);
   };
-
   const handleRejectRequest = async (item) => {
     try {
       await axios.delete(
-        `https://orca-app-ik7qo.ondigitalocean.app/api/swap-requests/${item.reqId}`
+        `https://orca-app-ik7qo.ondigitalocean.app/api/swap-requests/${item.reqId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      // Remove the rejected swap request from the swapRequests state
+      setSwapRequests((prevSwapRequests) =>
+        prevSwapRequests.filter((request) => request.id !== item.reqId)
       );
     } catch (error) {
       console.error("Error deleting swap request:", error);
@@ -111,7 +121,7 @@ const Notifications = () => {
   };
 
   return (
-    <div>
+    <Container style={{ maxWidth: "1000px" }}>
       <h2 style={{ padding: "30px 0px" }}>Swap Item Requests</h2>
       {swapRequests.length > 0 ? (
         <ListGroup>
@@ -120,7 +130,6 @@ const Notifications = () => {
               key={item.senderName}
               style={{
                 fontSize: "18px",
-                backgroundColor: "#D1F9FB",
                 borderRadius: "10px",
                 display: "grid",
                 gridTemplateColumns: "auto 1fr auto", // Image - Text - Buttons
@@ -155,7 +164,7 @@ const Notifications = () => {
                   variant="success"
                   className="mr-2"
                   onClick={() => handleAcceptRequest(item)}
-                  style={{ backgroundColor: "#0d6efd" }}
+                  style={{ backgroundColor: "black" }}
                 >
                   Accept
                 </Button>
@@ -205,7 +214,7 @@ const Notifications = () => {
           )}
         </Modal.Body>
       </Modal>
-    </div>
+    </Container>
   );
 };
 
