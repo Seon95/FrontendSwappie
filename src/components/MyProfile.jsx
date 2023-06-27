@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Container, Card, Button, Form, Modal } from "react-bootstrap";
+import { FaTrash, FaEdit } from "react-icons/fa";
 import axios from "axios";
 import Dropzone from "dropzone";
 import { useDropzone } from "react-dropzone";
@@ -13,8 +14,9 @@ const MyProfile = ({ userId, token }) => {
   const [selectedImage, setSelectedImage] = useState(null);
   const [quantity, setQuantity] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [showModal, setShowModal] = useState(false);
-  const [selectedImages, setSelectedImages] = useState([]); // Change this line
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [selectedImages, setSelectedImages] = useState([]);
 
   const [editItemData, setEditItemData] = useState({
     id: "",
@@ -33,6 +35,8 @@ const MyProfile = ({ userId, token }) => {
       setSelectedImages(acceptedFiles);
     },
   });
+  console.log("userid" + userId);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -64,6 +68,7 @@ const MyProfile = ({ userId, token }) => {
       formData.append("description", description);
       formData.append("category_id", category);
       formData.append("quantity", quantity);
+
       if (selectedImages.length) {
         selectedImages.forEach((image, index) => {
           formData.append(`images[${index}]`, image);
@@ -71,7 +76,7 @@ const MyProfile = ({ userId, token }) => {
       }
 
       await axios.post(
-        `https://orca-app-ik7qo.ondigitalocean.app/api/users/items/${userId}`,
+        `https://orca-app-ik7qo.ondigitalocean.app/api/items/${userId}`,
         formData,
         {
           headers: {
@@ -84,8 +89,8 @@ const MyProfile = ({ userId, token }) => {
       const response = await axios.get(
         `https://orca-app-ik7qo.ondigitalocean.app/api/users/${userId}`
       );
-      setItems(response.data.items);
 
+      setItems(response.data.items);
       setName("");
       setDescription("");
       setCategory("");
@@ -102,7 +107,7 @@ const MyProfile = ({ userId, token }) => {
   const handleDeleteItem = async (itemId) => {
     try {
       await axios.delete(
-        `https://orca-app-ik7qo.ondigitalocean.app/api/users/${userId}/items/${itemId}`,
+        `https://orca-app-ik7qo.ondigitalocean.app/api/items/${userId}/${itemId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -125,9 +130,8 @@ const MyProfile = ({ userId, token }) => {
       category: item.category_id,
       quantity: item.quantity,
     });
-    setSelectedImages(item.images); // Set selectedImages with existing item images
-
-    setShowModal(true);
+    setSelectedImages(item.images);
+    setShowEditModal(true);
   };
 
   const handleImageChange = (e) => {
@@ -135,12 +139,18 @@ const MyProfile = ({ userId, token }) => {
     setSelectedImages(files);
   };
 
-  // const handleImageChange = (e) => {
-  //   const file = e.target.files[0];
-  //   setSelectedImage(file);
-  // };
-  const handleModalClose = () => {
-    setShowModal(false);
+  const handleAddModalClose = () => {
+    setShowAddModal(false);
+    // Reset the form fields
+    setName("");
+    setDescription("");
+    setCategory("");
+    setSelectedImages([]);
+    setQuantity(0);
+  };
+
+  const handleEditModalClose = () => {
+    setShowEditModal(false);
     setEditItemData({
       id: "",
       name: "",
@@ -153,7 +163,7 @@ const MyProfile = ({ userId, token }) => {
   const handleUpdateItem = async () => {
     try {
       await axios.put(
-        `https://orca-app-ik7qo.ondigitalocean.app/api/users/${userId}/items/${editItemData.id}`,
+        `https://orca-app-ik7qo.ondigitalocean.app/api/items/${userId}/${editItemData.id}`,
         {
           name: editItemData.name,
           description: editItemData.description,
@@ -171,11 +181,12 @@ const MyProfile = ({ userId, token }) => {
       const response = await axios.get(
         `https://orca-app-ik7qo.ondigitalocean.app/api/users/${userId}`
       );
+
       setItems(response.data.items);
     } catch (error) {
       console.error("Error updating item:", error);
     } finally {
-      setShowModal(false);
+      setShowEditModal(false);
       setEditItemData({
         id: "",
         name: "",
@@ -186,48 +197,61 @@ const MyProfile = ({ userId, token }) => {
     }
   };
 
-  console.log("s" + items);
-  items.map((item) => console.log("tt" + item.images));
+  console.log("tokensito" + token);
 
   return (
     <Container>
+      <h2 className="titleMyProfile">Item Details</h2>
+
       {items.length > 0 && (
         <div>
-          <h2>Item Details</h2>
           {items.map((item) => {
-            const imagesArray = JSON.parse(item.images); // Parse the string into an array
+            const imagesArray = JSON.parse(item.images);
             const imgSrc =
               imagesArray && imagesArray.length > 0
                 ? imagesArray[0].split("_")[1]
                 : null;
             console.log("Image src:", imgSrc);
             return (
-              <Card key={item.id} className="mb-3">
-                <Card.Body>
-                  <Card.Title>{item.name}</Card.Title>
-                  <Card.Text>{item.description}</Card.Text>
-                  <Card.Text>{item.category}</Card.Text>
-                  {imgSrc && (
-                    <Card.Img
-                      src={`/${imgSrc}`}
-                      alt={`Image 1`}
-                      className="img-fluid"
-                      style={{ width: "70px", height: "70px" }}
-                    />
-                  )}
-                  <Button
-                    variant="danger"
-                    className="mr-2"
-                    onClick={() => handleDeleteItem(item.id)}
-                  >
-                    Delete
-                  </Button>
-                  <Button
-                    variant="primary"
-                    onClick={() => handleEditItem(item)}
-                  >
-                    Edit
-                  </Button>
+              <Card
+                key={item.id}
+                className="mb-3 cardStyle"
+                style={{
+                  background: "transparent",
+                  borderColor: "black",
+                }}
+              >
+                <Card.Body className="item-details">
+                  <div className="item-details-image">
+                    {imgSrc && (
+                      <Card.Img
+                        src={`/${imgSrc}`}
+                        alt={`Image 1`}
+                        className="img-fluid"
+                        style={{ width: "100px", height: "100px" }}
+                      />
+                    )}
+                  </div>
+                  <div className="item-details-content">
+                    <Card.Title>{item.name}</Card.Title>
+                    <Card.Text>{item.description}</Card.Text>
+                  </div>
+                  <div className="item-details-actions">
+                    <Button
+                      variant="danger"
+                      className="mr-2"
+                      onClick={() => handleDeleteItem(item.id)}
+                    >
+                      <FaTrash />
+                    </Button>
+                    <Button
+                      variant="primary"
+                      onClick={() => handleEditItem(item)}
+                      style={{}}
+                    >
+                      <FaEdit />
+                    </Button>
+                  </div>
                 </Card.Body>
               </Card>
             );
@@ -236,100 +260,123 @@ const MyProfile = ({ userId, token }) => {
       )}
 
       <div>
-        <h2>Add New Item</h2>
-        <Form onSubmit={handleAddItem}>
-          <Form.Group controlId="name">
-            <Form.Label>Name</Form.Label>
-            <Form.Control
-              type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-            />
-          </Form.Group>
-          <Form.Group controlId="description">
-            <Form.Label>Description</Form.Label>
-            <Form.Control
-              as="textarea"
-              rows={3}
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-            />
-          </Form.Group>
-          <Form.Group controlId="category">
-            <Form.Label>Category</Form.Label>
-            <Form.Control
-              type="text"
-              value={category}
-              onChange={(e) => setCategory(e.target.value)}
-            />
-          </Form.Group>
-          <Form.Group controlId="quantity">
-            <Form.Label>Quantity</Form.Label>
-            <Form.Control
-              type="number"
-              value={quantity}
-              onChange={(e) => setQuantity(Number(e.target.value))}
-            />
-          </Form.Group>
-          <Form.Group controlId="image">
-            <Form.Label>Image Upload (Select or drop your images)</Form.Label>
-
-            <div {...getRootProps()}>
-              <input {...getInputProps()} />
-              {/* <p>Drag 'n' drop some files here, or click to select files</p> */}
-              <Button onClick={open}>Select File</Button>
-            </div>
-            <aside>
-              <ul>
-                {acceptedFiles.map((file, index) => (
-                  <li key={index} className="dz-preview dz-file-preview">
-                    <div className="dz-details">
-                      <div className="dz-filename">
-                        <span data-dz-name>{file.path}</span>
-                      </div>
-                      <div className="dz-size" data-dz-size>
-                        {file.size} bytes
-                      </div>
-                      <img data-dz-thumbnail src={file.preview} alt="Preview" />
-                    </div>
-                    <div className="dz-progress">
-                      <span
-                        className="dz-upload"
-                        style={{ width: `${file.progress}%` }}
-                        data-dz-uploadprogress
-                      ></span>
-                    </div>
-                    <div className="dz-success-mark">
-                      <span>✔</span>
-                    </div>
-                    <div className="dz-error-mark">
-                      <span>✘</span>
-                    </div>
-                    <div className="dz-error-message">
-                      <span data-dz-errormessage></span>
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            </aside>
-          </Form.Group>
-          <Button variant="success" type="submit">
-            Add Item
-          </Button>
-        </Form>
+        <h2 className="AddItemTitle">Add New Item </h2>
+        <Button
+          variant="primary"
+          onClick={() => setShowAddModal(true)}
+          style={{ backgroundColor: "black" }}
+        >
+          Add Item
+        </Button>
       </div>
 
-      <Modal show={showModal} onHide={handleModalClose}>
+      <Modal show={showAddModal} onHide={handleAddModalClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Add New Item</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form onSubmit={handleAddItem}>
+            <Form.Group controlId="name">
+              <Form.Label>Name</Form.Label>
+              <Form.Control
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+              />
+            </Form.Group>
+            <Form.Group controlId="description">
+              <Form.Label>Description</Form.Label>
+              <Form.Control
+                as="textarea"
+                rows={3}
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+              />
+            </Form.Group>
+            <Form.Group controlId="category">
+              <Form.Label>Category</Form.Label>
+              <Form.Control
+                type="text"
+                value={category}
+                onChange={(e) => setCategory(e.target.value)}
+              />
+            </Form.Group>
+            <Form.Group controlId="quantity">
+              <Form.Label>Quantity</Form.Label>
+              <Form.Control
+                type="number"
+                value={quantity}
+                onChange={(e) => setQuantity(Number(e.target.value))}
+              />
+            </Form.Group>
+            <Form.Group controlId="image">
+              <Form.Label>Image Upload (Select or drop your images)</Form.Label>
+
+              <div {...getRootProps()}>
+                <input {...getInputProps()} />
+                <Button onClick={open}>Select File</Button>
+              </div>
+              <aside>
+                <ul>
+                  {acceptedFiles.map((file, index) => (
+                    <li key={index} className="dz-preview dz-file-preview">
+                      <div className="dz-details">
+                        <div className="dz-filename">
+                          <span data-dz-name>{file.path}</span>
+                        </div>
+                        <div className="dz-size" data-dz-size>
+                          {file.size} bytes
+                        </div>
+                        <img
+                          data-dz-thumbnail
+                          src={file.preview}
+                          alt="Preview"
+                        />
+                      </div>
+                      <div className="dz-progress">
+                        <span
+                          className="dz-upload"
+                          style={{ width: `${file.progress}%` }}
+                          data-dz-uploadprogress
+                        ></span>
+                      </div>
+                      <div className="dz-success-mark">
+                        <span>✔</span>
+                      </div>
+                      <div className="dz-error-mark">
+                        <span>✘</span>
+                      </div>
+                      <div className="dz-error-message">
+                        <span data-dz-errormessage></span>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              </aside>
+            </Form.Group>
+            <Button variant="success" type="submit">
+              Add Item
+            </Button>
+          </Form>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleAddModalClose}>
+            Cancel
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
+      <Modal show={showEditModal} onHide={handleEditModalClose}>
         <Modal.Header closeButton>
           <Modal.Title>Edit Item</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Form>
+          <Form onSubmit={handleUpdateItem}>
             <Form.Group controlId="editName">
               <Form.Label>Name</Form.Label>
               <Form.Control
                 type="text"
-                value={editItemData.name || ""}
+                value={editItemData.name}
                 onChange={(e) =>
                   setEditItemData({
                     ...editItemData,
@@ -343,7 +390,7 @@ const MyProfile = ({ userId, token }) => {
               <Form.Control
                 as="textarea"
                 rows={3}
-                value={editItemData.description || ""}
+                value={editItemData.description}
                 onChange={(e) =>
                   setEditItemData({
                     ...editItemData,
@@ -356,7 +403,7 @@ const MyProfile = ({ userId, token }) => {
               <Form.Label>Category</Form.Label>
               <Form.Control
                 type="text"
-                value={editItemData.category || ""}
+                value={editItemData.category}
                 onChange={(e) =>
                   setEditItemData({
                     ...editItemData,
@@ -369,7 +416,7 @@ const MyProfile = ({ userId, token }) => {
               <Form.Label>Quantity</Form.Label>
               <Form.Control
                 type="number"
-                value={editItemData.quantity || 0}
+                value={editItemData.quantity}
                 onChange={(e) =>
                   setEditItemData({
                     ...editItemData,
@@ -378,14 +425,14 @@ const MyProfile = ({ userId, token }) => {
                 }
               />
             </Form.Group>
+            <Button variant="success" type="submit">
+              Update Item
+            </Button>
           </Form>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={handleModalClose}>
+          <Button variant="secondary" onClick={handleEditModalClose}>
             Cancel
-          </Button>
-          <Button variant="primary" onClick={handleUpdateItem}>
-            Update
           </Button>
         </Modal.Footer>
       </Modal>

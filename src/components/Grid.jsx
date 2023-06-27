@@ -25,10 +25,10 @@ const Grid = ({ items, category }) => {
         xs={1}
         sm={2}
         md={3}
-        lg={3}
-        xl={3}
+        lg={4}
+        xl={4}
         gap={4}
-        style={{ marginRight: "-100px" }}
+        // style={{ marginRight: "-100px" }}
       >
         {filteredItems.map((item) => {
           const images = JSON.parse(item.images);
@@ -41,8 +41,9 @@ const Grid = ({ items, category }) => {
             <Col key={item.id} className="mb-3">
               <Card
                 style={{
-                  width: "255px",
+                  width: "250px",
                   height: "300px",
+                  backgroundColor: "#e1e2e3",
                 }}
               >
                 <Link to={`/detail/${item.id}`}>
@@ -69,7 +70,9 @@ const Grid = ({ items, category }) => {
                   )}
                 </Link>
                 <Card.Body>
-                  <Card.Text>{item.description}</Card.Text>{" "}
+                  <Card.Text style={{ fontWeight: "600" }}>
+                    {item.name}{" "}
+                  </Card.Text>{" "}
                   {/* Display the item description */}
                   {/* <Button variant="primary" onClick={() => handleItemClick(item.id)}>
                     View Details
