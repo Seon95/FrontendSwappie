@@ -73,7 +73,12 @@ const Grid = ({ items, category }) => {
     const end = start + columns;
     const rowItems = renderItems.slice(start, end);
     rows.push(
-      <Row key={i} className="mt-4">
+      <Row
+        key={i}
+        className={`mt-4 ${
+          window.innerWidth < 768 ? "justify-content-center" : ""
+        }`}
+      >
         {rowItems}
       </Row>
     );
