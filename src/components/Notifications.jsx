@@ -155,8 +155,9 @@ const Notifications = () => {
               }}
             >
               <div>
-                <b>{item.myItemUser}</b> wants to change his{" "}
-                <b> {item.myItemName} </b>
+                <b style={{ fontWeight: "700" }}>{item.myItemUser}</b> wants to
+                change his{" "}
+                <b style={{ fontWeight: "700" }}> {item.myItemName} </b>
                 <Image
                   src={`https://orca-app-ik7qo.ondigitalocean.app/api/images/${item.myItemImage}`}
                   alt="Item"
@@ -169,7 +170,8 @@ const Notifications = () => {
                   }}
                   onClick={() => handleImageClick(item)}
                 />{" "}
-                item for your item <b>{item.itemName}</b>
+                item for your item{" "}
+                <b style={{ fontWeight: "700" }}>{item.itemName}</b>
                 <Image
                   src={`https://orca-app-ik7qo.ondigitalocean.app/api/images/${item.itemImage}`}
                   alt="Item"
