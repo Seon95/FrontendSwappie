@@ -133,7 +133,7 @@ const Notifications = () => {
   };
 
   return (
-    <Container style={{ maxWidth: "1000px" }}>
+    <Container style={{ maxWidth: "1200px" }}>
       <h2 style={{ padding: "30px 0px" }}>Swap Item Requests</h2>
       {swapRequests.length > 0 ? (
         <ListGroup>
