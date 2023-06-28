@@ -3,6 +3,7 @@ import axios from "axios";
 import { ListGroup, Image, Modal, Button, Container } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
+
 const Notifications = () => {
   const [swapRequests, setSwapRequests] = useState([]);
   const [itemData, setItemData] = useState([]);
@@ -54,7 +55,9 @@ const Notifications = () => {
             const myItemName = myItem.name;
             const myItemId = myItem.id;
             const myItemDescription = myItem.description;
-            const myItemImage = myItem.images.slice(1, -1).slice(1, -1);
+            const myItemImages = JSON.parse(myItem.images);
+            const myItemImage =
+              myItemImages.length > 0 ? myItemImages[0] : null;
             const itemImages = JSON.parse(item.images);
             const itemImage = itemImages[0];
 
