@@ -196,6 +196,8 @@ const MyProfile = ({ userId }) => {
   };
 
   const handleUpdateItem = async () => {
+    e.preventDefault();
+
     try {
       await axios.put(
         `https://orca-app-ik7qo.ondigitalocean.app/api/items/${userId}/${editItemData.id}`,
