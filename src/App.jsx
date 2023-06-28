@@ -38,6 +38,7 @@ function App() {
     setUserName("");
     localStorage.removeItem("loggedIn");
     localStorage.removeItem("userId");
+    localStorage.removeItem("userName");
   };
 
   return (

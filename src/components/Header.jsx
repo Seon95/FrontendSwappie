@@ -1,10 +1,9 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Navbar, Nav, ButtonGroup } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import LoginModal from "./LoginModal";
 import RegisterModal from "./RegisterModal";
 import "../index.css";
-import { useState, useEffect } from "react";
 
 const Header = ({ handleLogin, handleLogout, loggedIn }) => {
   const [userName, setUserName] = useState("");
@@ -26,13 +25,11 @@ const Header = ({ handleLogin, handleLogout, loggedIn }) => {
 
   return (
     <Navbar
-      className="w-100"
+      className="w-100 d-flex justify-content-between"
       expand="lg"
       style={{
         padding: "0.5rem 2rem",
         border: "1px solid ",
-        display: "flex",
-        justifyContent: "space-between",
         backgroundColor: "black",
         fontFamily: "Clarkson, Helvetica, sans-serif",
         fontSize: "15px",
@@ -42,43 +39,46 @@ const Header = ({ handleLogin, handleLogout, loggedIn }) => {
       <Navbar.Brand as={Link} to="/" style={{ color: "white" }}>
         Swappie
       </Navbar.Brand>
-      <Nav style={{ gap: "30px" }}>
-        <Nav.Link
-          className="nav-link-spacing"
-          href="#chat"
-          style={{ color: "white" }}
-        >
-          Chat
-        </Nav.Link>
-        <Nav.Link
-          as={Link}
-          to="/notifications"
-          className="nav-link-spacing"
-          href="#notifications"
-          style={{ color: "white" }}
-        >
-          Notifications
-        </Nav.Link>
-        {loggedIn ? (
+      <Navbar.Toggle aria-controls="navbar-nav" />
+      <Navbar.Collapse id="navbar-nav" className="justify-content-center">
+        <Nav>
           <Nav.Link
-            as={Link}
-            to="/myprofile"
             className="nav-link-spacing"
+            href="#chat"
             style={{ color: "white" }}
           >
-            My Profile
+            Chat
           </Nav.Link>
-        ) : null}
-        <Nav.Link
-          as={Link}
-          to="/aboutus"
-          className="nav-link-spacing"
-          href="#aboutus"
-          style={{ color: "white" }}
-        >
-          About Us
-        </Nav.Link>
-      </Nav>
+          <Nav.Link
+            as={Link}
+            to="/notifications"
+            className="nav-link-spacing"
+            href="#notifications"
+            style={{ color: "white" }}
+          >
+            Notifications
+          </Nav.Link>
+          {loggedIn && (
+            <Nav.Link
+              as={Link}
+              to="/myprofile"
+              className="nav-link-spacing"
+              style={{ color: "white" }}
+            >
+              My Profile
+            </Nav.Link>
+          )}
+          <Nav.Link
+            as={Link}
+            to="/aboutus"
+            className="nav-link-spacing"
+            href="#aboutus"
+            style={{ color: "white" }}
+          >
+            About Us
+          </Nav.Link>
+        </Nav>
+      </Navbar.Collapse>
       <ButtonGroup>
         {loggedIn ? (
           <>

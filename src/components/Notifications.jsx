@@ -1,6 +1,13 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { ListGroup, Image, Modal, Button, Container } from "react-bootstrap";
+import {
+  ListGroup,
+  Image,
+  Modal,
+  Button,
+  Container,
+  Col,
+} from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 
@@ -107,6 +114,7 @@ const Notifications = () => {
   const handleAcceptRequest = (item) => {
     //
   };
+
   const handleRejectRequest = async (item) => {
     try {
       await axios.delete(
@@ -137,10 +145,6 @@ const Notifications = () => {
               style={{
                 fontSize: "18px",
                 borderRadius: "10px",
-                display: "grid",
-                gridTemplateColumns: "auto 1fr auto",
-                alignItems: "center",
-                gap: "20px",
                 marginBottom: "20px",
                 backgroundColor: "transparent",
                 border: "1px solid",
@@ -148,50 +152,51 @@ const Notifications = () => {
                 fontWeight: "600",
               }}
             >
-              <div>
-                <b style={{ fontWeight: "700" }}>{item.myItemUser}</b> wants to
-                change his{" "}
-                <b style={{ fontWeight: "700" }}> {item.myItemName} </b>
-                <Image
-                  src={`https://orca-app-ik7qo.ondigitalocean.app/api/images/${item.myItemImage}`}
-                  alt="Item"
-                  style={{
-                    width: "100px",
-                    height: "100px",
-                    cursor: "pointer",
-                    marginLeft: "15px",
-                    marginRight: "15px",
-                  }}
-                  onClick={() => handleImageClick(item)}
-                />{" "}
-                item for your item{" "}
-                <b style={{ fontWeight: "700" }}>{item.itemName}</b>
-                <Image
-                  src={`https://orca-app-ik7qo.ondigitalocean.app/api/images/${item.itemImage}`}
-                  alt="Item"
-                  style={{
-                    width: "100px",
-                    height: "100px",
-                    marginLeft: "15px",
-                  }}
-                />
-              </div>
-
-              <div style={{ justifySelf: "end" }}>
-                <Button
-                  variant="success"
-                  className="mr-2"
-                  onClick={() => handleAcceptRequest(item)}
-                  style={{ backgroundColor: "black", borderColor: "black" }}
-                >
-                  Accept
-                </Button>
-                <Button
-                  variant="danger"
-                  onClick={() => handleRejectRequest(item)}
-                >
-                  Reject
-                </Button>
+              <div className="d-flex flex-wrap align-items-center">
+                <div className="mr-3">
+                  <b style={{ fontWeight: "700" }}>{item.myItemUser}</b> wants
+                  to change his{" "}
+                  <b style={{ fontWeight: "700" }}> {item.myItemName} </b>
+                  <Image
+                    src={`https://orca-app-ik7qo.ondigitalocean.app/api/images/${item.myItemImage}`}
+                    alt="Item"
+                    style={{
+                      width: "100px",
+                      height: "100px",
+                      cursor: "pointer",
+                      marginLeft: "15px",
+                      marginRight: "15px",
+                    }}
+                    onClick={() => handleImageClick(item)}
+                  />{" "}
+                  item for your item{" "}
+                  <b style={{ fontWeight: "700" }}>{item.itemName}</b>
+                  <Image
+                    src={`https://orca-app-ik7qo.ondigitalocean.app/api/images/${item.itemImage}`}
+                    alt="Item"
+                    style={{
+                      width: "100px",
+                      height: "100px",
+                      marginLeft: "15px",
+                    }}
+                  />
+                </div>
+                <div className="mt-3 mt-md-0 ml-md-auto">
+                  <Button
+                    variant="success"
+                    className="mr-2"
+                    onClick={() => handleAcceptRequest(item)}
+                    style={{ backgroundColor: "black", borderColor: "black" }}
+                  >
+                    Accept
+                  </Button>
+                  <Button
+                    variant="danger"
+                    onClick={() => handleRejectRequest(item)}
+                  >
+                    Reject
+                  </Button>
+                </div>
               </div>
             </ListGroup.Item>
           ))}

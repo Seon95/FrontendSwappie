@@ -62,8 +62,16 @@ const Grid = ({ items, category }) => {
   });
 
   const rows = [];
-  for (let i = 0; i < renderItems.length; i += 3) {
-    const rowItems = renderItems.slice(i, i + 3);
+  const mobileColumns = 2; // Number of columns on mobile devices
+  const desktopColumns = 3; // Number of columns on desktop devices
+  const columns = window.innerWidth < 768 ? mobileColumns : desktopColumns;
+  const totalItems = renderItems.length;
+  const totalRows = Math.ceil(totalItems / columns);
+
+  for (let i = 0; i < totalRows; i++) {
+    const start = i * columns;
+    const end = start + columns;
+    const rowItems = renderItems.slice(start, end);
     rows.push(
       <Row key={i} className="mt-4">
         {rowItems}

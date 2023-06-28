@@ -13,7 +13,7 @@ const Categories = ({ setCategory, categories }) => {
   };
 
   return (
-    <div className="categories-wrapper">
+    <div className="categories-wrapper d-none d-lg-flex align-items-center">
       <Form>
         <Form.Group>
           <Form.Check
