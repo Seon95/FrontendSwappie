@@ -265,7 +265,7 @@ const MyProfile = ({ userId }) => {
                   <div className="item-details-image">
                     {imgSrc && (
                       <Card.Img
-                        src={`/${imgSrc}`}
+                        src={`https://orca-app-ik7qo.ondigitalocean.app/${imgSrc}`}
                         alt={`Image 1`}
                         className="img-fluid"
                         style={{ width: "100px", height: "100px" }}

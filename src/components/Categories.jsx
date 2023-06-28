@@ -28,7 +28,7 @@ const Categories = ({ setCategory, categories }) => {
                   style={{
                     marginBottom: "20px",
                     fontWeight: 500,
-                    fontSize: "17px",
+                    fontSize: "15px",
                   }}
                 >
                   {category.name}

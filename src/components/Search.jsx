@@ -40,7 +40,7 @@ const Search = ({ categories }) => {
         </Col>
         <Col>
           <Form.Control as="select" defaultValue="Choose...">
-            <option>Choose...</option>
+            <option>Choose category</option>
             {categories.map((category) => (
               <option key={category.id}>{category.name}</option>
             ))}
@@ -48,7 +48,7 @@ const Search = ({ categories }) => {
         </Col>
         <Col>
           <Form.Control as="select" defaultValue="Choose...">
-            <option>Choose...</option>
+            <option>Choose city</option>
             <option>City 1</option>
             <option>City 2</option>
             <option>City 3</option>
