@@ -72,7 +72,7 @@ const Grid = ({ items, category }) => {
   }
 
   return (
-    <Container fluid style={{ maxWidth: "1000px" }}>
+    <Container fluid style={{ maxWidth: "900px" }}>
       {rows}
       <Routes>
         <Route path="/detail/:id" element={<DetailPage />} />
