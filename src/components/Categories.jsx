@@ -5,6 +5,10 @@ import { Form, Col } from "react-bootstrap";
 const Categories = ({ setCategory, categories }) => {
   const [selectedCategory, setSelectedCategory] = useState("");
 
+  useEffect(() => {
+    // Add logic here if you want to preselect a category initially
+  }, []);
+
   const handleCategoryChange = (categoryId) => {
     setSelectedCategory(categoryId);
     setCategory(categoryId);
@@ -12,11 +16,28 @@ const Categories = ({ setCategory, categories }) => {
 
   return (
     <div className="categories-wrapper">
-      {/* <h3 style={{ marginBottom: "20px", textDecoration: "underline" }}>
-        Categories
-      </h3> */}
       <Form>
         <Form.Group>
+          <Form.Check
+            type="radio"
+            id="category-all"
+            label={
+              <Form.Check.Label
+                className="custom-label"
+                style={{
+                  marginBottom: "20px",
+                  fontWeight: 500,
+                  fontSize: "15px",
+                }}
+              >
+                All Categories
+              </Form.Check.Label>
+            }
+            value=""
+            checked={selectedCategory === ""}
+            onChange={() => handleCategoryChange("")}
+            style={{ marginBottom: "10px" }}
+          />
           {categories.map((category) => (
             <Form.Check
               key={category.id}

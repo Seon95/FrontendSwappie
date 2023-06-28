@@ -47,7 +47,7 @@ function HomePage() {
       <div className="categories-wrapper">
         <Categories setCategory={setCategory} categories={categories} />
       </div>
-      <Container>
+      <Container style={{ maxWidth: "900px" }}>
         <Row>
           <Col>
             <Search category={category} categories={categories} />

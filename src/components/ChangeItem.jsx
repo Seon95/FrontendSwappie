@@ -189,8 +189,12 @@ const ChangeItem = ({ itemId }) => {
           )}
         </div>
         <div className="infobox">
-          <p style={{ color: "black" }}>.</p>
-          <p className="ItemName">{itemName}</p>
+          <p className="ItemDescription" style={{ color: "black" }}>
+            {itemDescription}
+          </p>
+          <p style={{ color: "black" }} className="ItemName">
+            {itemName}
+          </p>
         </div>
       </div>
     </div>
