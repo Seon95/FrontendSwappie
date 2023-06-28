@@ -167,7 +167,7 @@ const Notifications = () => {
                   variant="success"
                   className="mr-2"
                   onClick={() => handleAcceptRequest(item)}
-                  style={{ backgroundColor: "black" }}
+                  style={{ backgroundColor: "black", borderColor: "black" }}
                 >
                   Accept
                 </Button>
