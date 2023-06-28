@@ -58,13 +58,6 @@
   height: 100%;
 }
 
-.slider-image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center;
-}
-
 .custom-arrow {
   position: absolute;
   top: 50%;
@@ -237,8 +230,6 @@
 .slider-image {
   width: 250px;
   height: 250px;
-  object-position: center;
-  object-fit: cover;
 }
 @media screen and (max-width: 600px) {
   .change-item-container {
