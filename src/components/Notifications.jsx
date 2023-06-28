@@ -53,6 +53,8 @@ const Notifications = () => {
               (item) => item.id === request.my_item_id
             );
             const myItemName = myItem.name;
+            const myItemImage = myItem.images.slice(1, -1).slice(1, -1);
+            console.log("22" + myItemImage);
 
             // Parse the images JSON string into an array
             const itemImages = JSON.parse(item.images);
@@ -62,6 +64,7 @@ const Notifications = () => {
               senderName: userData.username,
               itemName,
               itemDescription: item.description,
+              myItemImage,
               itemImage,
               myItemName,
               reqId,
@@ -75,6 +78,7 @@ const Notifications = () => {
               itemDescription: "",
               itemImage: "",
               myItemName: "",
+              myItemImage: "",
             };
           }
         })
@@ -137,17 +141,17 @@ const Notifications = () => {
                 gap: "20px",
                 marginBottom: "20px",
                 backgroundColor: "transparent",
-                borderColor: "black",
+                border: "1px solid black",
               }}
             >
               <div>
                 <u>{item.senderName}</u> wants to change his{" "}
-                <u>{item.itemName}</u> item for your item{" "}
-                <u>{item.myItemName}</u>
+                <u>{item.myItemName}</u> item for your item{" "}
+                <u>{item.itemName}</u>
               </div>
               <div>
                 <Image
-                  src={`https://orca-app-ik7qo.ondigitalocean.app/api/images/${item.itemImage}`}
+                  src={`https://orca-app-ik7qo.ondigitalocean.app/api/images/${item.myItemImage}`}
                   alt="Item"
                   style={{
                     width: "100px",
