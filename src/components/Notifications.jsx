@@ -8,14 +8,13 @@ const Notifications = () => {
   const [itemData, setItemData] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
-  const token = localStorage.getItem("token"); // Retrieve the token from localStorage
+  const token = localStorage.getItem("token");
 
   useEffect(() => {
     const fetchSwapRequests = async () => {
       try {
         const userId = localStorage.getItem("userId");
         const response = await axios.get(
-          // `https://orca-app-ik7qo.ondigitalocean.app/api/users/${userId}/swap-requests`
           `https://orca-app-ik7qo.ondigitalocean.app/api/swap-requests/${userId}`
         );
         const swapRequestsData = response.data;
@@ -34,18 +33,15 @@ const Notifications = () => {
         swapRequests.map(async (request) => {
           try {
             const response = await axios.get(
-              // `https://orca-app-ik7qo.ondigitalocean.app/api/items/${request.item_id}/user`
               `https://orca-app-ik7qo.ondigitalocean.app/api/user/${request.item_id}`
             );
             const userData = response.data.user;
-            console.log(userData + "jj");
             const itemsData = JSON.parse(userData.items);
             const item = itemsData.find((item) => item.id === request.item_id);
             const itemName = item.name;
             const reqId = request.id;
 
             const myItemResponse = await axios.get(
-              // `https://orca-app-ik7qo.ondigitalocean.app/api/items/${request.my_item_id}/user`
               `https://orca-app-ik7qo.ondigitalocean.app/api/user/${request.my_item_id}`
             );
             const myItemUserData = myItemResponse.data.user;
@@ -59,9 +55,6 @@ const Notifications = () => {
             const myItemId = myItem.id;
             const myItemDescription = myItem.description;
             const myItemImage = myItem.images.slice(1, -1).slice(1, -1);
-            console.log("22" + myItemImage);
-
-            // Parse the images JSON string into an array
             const itemImages = JSON.parse(item.images);
             const itemImage = itemImages[0];
 
@@ -76,7 +69,6 @@ const Notifications = () => {
               myItemUser,
               myItemDescription,
             };
-            console.log(myItemName + "myitem" + itemName + "itemname");
           } catch (error) {
             console.error("Error fetching item data:", error);
 
@@ -110,7 +102,7 @@ const Notifications = () => {
   };
 
   const handleAcceptRequest = (item) => {
-    console.log("Accepting swap request:", item);
+    //
   };
   const handleRejectRequest = async (item) => {
     try {
@@ -123,7 +115,6 @@ const Notifications = () => {
         }
       );
 
-      // Remove the rejected swap request from the swapRequests state
       setSwapRequests((prevSwapRequests) =>
         prevSwapRequests.filter((request) => request.id !== item.reqId)
       );
@@ -144,8 +135,8 @@ const Notifications = () => {
                 fontSize: "18px",
                 borderRadius: "10px",
                 display: "grid",
-                gridTemplateColumns: "auto 1fr auto", // Image - Text - Buttons
-                alignItems: "center", // Center items vertically
+                gridTemplateColumns: "auto 1fr auto",
+                alignItems: "center",
                 gap: "20px",
                 marginBottom: "20px",
                 backgroundColor: "transparent",
@@ -247,7 +238,7 @@ const Notifications = () => {
                   maxHeight: "300px",
                   width: "100%",
                   height: "100%",
-                  margin: "0 auto", // Center the image horizontally
+                  margin: "0 auto",
                 }}
               />
               <p style={{ marginTop: "20px", color: "black" }}>

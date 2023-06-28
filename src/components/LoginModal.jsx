@@ -35,22 +35,17 @@ const LoginModal = ({ handleLogin }) => {
           body: JSON.stringify({ email, password }),
         }
       );
-      console.log("elma");
       if (response.ok) {
         const data = await response.json();
         const { id_user } = data;
-        // successful login
         setEmail("");
         setPassword("");
         setError("");
         handleClose();
         handleLogin(data);
-        // console.log("yes" + data.user.id);
-        // console.log("yes" + JSON.stringify(data));
       } else if (response.status === 401) {
         setError("Invalid email or password");
       } else {
-        // login error
         setError("Something went wrong. Please try again later.");
       }
     } catch (error) {

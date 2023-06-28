@@ -21,7 +21,7 @@ const Header = ({ handleLogin, handleLogout, loggedIn }) => {
     localStorage.removeItem("loggedIn");
     localStorage.removeItem("userName");
     localStorage.removeItem("token");
-    window.location.href = "/"; // Redirect to the homepage
+    window.location.href = "/";
   };
 
   return (

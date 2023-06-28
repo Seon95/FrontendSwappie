@@ -6,7 +6,6 @@ import Dropzone from "dropzone";
 import { useDropzone } from "react-dropzone";
 
 const MyProfile = ({ userId }) => {
-  console.log(userId + "nene");
   const [items, setItems] = useState([]);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
@@ -17,7 +16,7 @@ const MyProfile = ({ userId }) => {
   const [showAddModal, setShowAddModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [selectedImages, setSelectedImages] = useState([]);
-  const token = localStorage.getItem("token"); // Retrieve the token from localStorage
+  const token = localStorage.getItem("token");
   const [categories, setCategories] = useState([]);
 
   useEffect(() => {
@@ -52,7 +51,6 @@ const MyProfile = ({ userId }) => {
       setSelectedImages(acceptedFiles);
     },
   });
-  console.log("userid" + userId);
 
   useEffect(() => {
     if (!userId) {
@@ -60,8 +58,7 @@ const MyProfile = ({ userId }) => {
     }
 
     const fetchData = async () => {
-      const token = localStorage.getItem("token"); // Retrieve the token from localStorage
-
+      const token = localStorage.getItem("token");
       try {
         const response = await axios.get(
           `https://orca-app-ik7qo.ondigitalocean.app/api/users/${userId}`,
@@ -72,7 +69,6 @@ const MyProfile = ({ userId }) => {
           }
         );
         setItems(response.data.items);
-        console.log(token);
       } catch (error) {
         console.error("Error fetching items:", error);
       }
@@ -129,7 +125,7 @@ const MyProfile = ({ userId }) => {
       setCategory("");
       setSelectedImage(null);
       setQuantity(0);
-      setShowAddModal(false); // Close the modal after successfully adding the item
+      setShowAddModal(false);
     } catch (error) {
       console.error("Error adding item:", error);
     } finally {
@@ -139,7 +135,7 @@ const MyProfile = ({ userId }) => {
 
   const handleDeleteItem = async (itemId) => {
     try {
-      const token = localStorage.getItem("token"); // Retrieve the token from localStorage
+      const token = localStorage.getItem("token");
 
       await axios.delete(
         `https://orca-app-ik7qo.ondigitalocean.app/api/items/${userId}/${itemId}`,
@@ -176,7 +172,6 @@ const MyProfile = ({ userId }) => {
 
   const handleAddModalClose = () => {
     setShowAddModal(false);
-    // Reset the form fields
     setName("");
     setDescription("");
     setCategory("");
@@ -233,8 +228,6 @@ const MyProfile = ({ userId }) => {
     }
   };
 
-  console.log("tokensito" + localStorage.getItem("token"));
-
   return (
     <Container style={{ maxWidth: "1000px" }}>
       <h2 className="titleMyProfile">Item Details</h2>
@@ -245,7 +238,6 @@ const MyProfile = ({ userId }) => {
             const imgSrc = JSON.parse(item.images);
             const firstImage = imgSrc.length > 0 ? imgSrc[0] : null;
 
-            console.log("Image src:", imgSrc);
             return (
               <Card
                 key={item.id}

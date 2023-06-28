@@ -18,9 +18,6 @@ const Search = ({ categories }) => {
           },
         }
       );
-
-      // Handle the response and perform any necessary actions with the search results
-      console.log(response.data);
     } catch (error) {
       console.error("Error searching items:", error);
     }

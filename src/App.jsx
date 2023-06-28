@@ -16,7 +16,6 @@ function App() {
   const [token, setToken] = useState("");
 
   useEffect(() => {
-    // Check if the userId exists in localStorage
     const storedUserId = localStorage.getItem("userId");
     if (storedUserId) {
       setUserId(storedUserId);

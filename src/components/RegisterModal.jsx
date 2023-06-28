@@ -41,8 +41,6 @@ const RegisterModal = () => {
       if (!response.ok) {
         throw new Error("Failed to register user");
       }
-
-      // TODO: handle successful registration
     } catch (error) {
       setError(error.message);
     } finally {

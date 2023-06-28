@@ -14,25 +14,22 @@ const ChangeItem = ({ itemId }) => {
   const [isSliderEnabled, setIsSliderEnabled] = useState(true);
   const [isButtonClickable, setIsButtonClickable] = useState(false);
   const [itemName, setItemName] = useState("");
-  const token = localStorage.getItem("token"); // Retrieve the token from localStorage
+  const token = localStorage.getItem("token");
 
   useEffect(() => {
     const fetchItemData = async () => {
       try {
         const wantedItemResponse = await axios.get(
-          // `https://orca-app-ik7qo.ondigitalocean.app/api/items/${itemId}/user`
           `https://orca-app-ik7qo.ondigitalocean.app/api/user/${itemId}`
         );
         const wantedItemData = JSON.parse(wantedItemResponse.data.user.items);
-        console.log(wantedItemData);
         const wantedItem = wantedItemData.find(
           (item) => item.id.toString() === itemId.toString()
         );
 
         if (wantedItem) {
-          const formattedImages = JSON.parse(wantedItem.images); // Parse the images array
+          const formattedImages = JSON.parse(wantedItem.images);
           setWantedItemImages(formattedImages);
-          console.log("e" + formattedImages);
 
           setItemDescription(wantedItem.description);
           setItemName(wantedItem.name);
@@ -41,7 +38,6 @@ const ChangeItem = ({ itemId }) => {
         }
 
         const receiverResponse = await axios.get(
-          // `https://orca-app-ik7qo.ondigitalocean.app/api/items/${itemId}/user`
           `https://orca-app-ik7qo.ondigitalocean.app/api/user/${itemId}`
         );
         setReceiverId(receiverResponse.data.user.id);
@@ -92,7 +88,7 @@ const ChangeItem = ({ itemId }) => {
 
       alert("Swap item request sent successfully!");
 
-      window.location.href = "/"; // Redirect to the homepage
+      window.location.href = "/";
     } catch (error) {
       console.error("Error sending swap item request:", error);
       alert("Error sending swap item request. Please try again.");
@@ -157,7 +153,6 @@ const ChangeItem = ({ itemId }) => {
               {myItemImages.map((item, index) => (
                 <div key={item.id} className="slider-image-container">
                   {JSON.parse(item.images).map((image, imageIndex) => {
-                    // Remove everything before the underscore
                     if (imageIndex === 0) {
                       return (
                         <div key={imageIndex} className="my-item">

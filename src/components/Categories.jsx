@@ -5,9 +5,7 @@ import { Form, Col } from "react-bootstrap";
 const Categories = ({ setCategory, categories }) => {
   const [selectedCategory, setSelectedCategory] = useState("");
 
-  useEffect(() => {
-    // Add logic here if you want to preselect a category initially
-  }, []);
+  useEffect(() => {}, []);
 
   const handleCategoryChange = (categoryId) => {
     setSelectedCategory(categoryId);

@@ -36,7 +36,6 @@ function HomePage() {
       );
       const allItems = response.data.map((user) => user.items).flat();
       setItems(allItems);
-      console.log(items);
     } catch (error) {
       console.error("Error fetching items:", error);
     }
