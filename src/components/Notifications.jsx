@@ -141,7 +141,8 @@ const Notifications = () => {
                 gap: "20px",
                 marginBottom: "20px",
                 backgroundColor: "transparent",
-                border: "1px solid black",
+                border: "1px solid",
+                borderColor: "black",
               }}
             >
               <div>
