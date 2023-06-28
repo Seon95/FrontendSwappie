@@ -239,7 +239,7 @@ const MyProfile = ({ userId }) => {
     <Container style={{ maxWidth: "1000px" }}>
       <h2 className="titleMyProfile">Item Details</h2>
 
-      {items.length > 0 && (
+      {items && items.length > 0 && (
         <div>
           {items.map((item) => {
             const imgSrc = JSON.parse(item.images);
