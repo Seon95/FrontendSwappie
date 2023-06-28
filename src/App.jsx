@@ -7,7 +7,7 @@ import AboutUs from "./components/AboutUs";
 import HomePage from "./components/HomePage";
 import DetailPage from "./components/DetailPage";
 import "./index.css";
-import "./app.css";
+import "./App.css";
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
