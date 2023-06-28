@@ -32,7 +32,7 @@ const Header = ({ handleLogin, handleLogout, loggedIn }) => {
         justifyContent: "space-between",
         backgroundColor: "black",
         fontFamily: "Clarkson, Helvetica, sans-serif",
-        fontSize: "18px",
+        fontSize: "15px",
         color: "white",
       }}
     >
