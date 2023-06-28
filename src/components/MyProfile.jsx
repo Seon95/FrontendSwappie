@@ -240,11 +240,8 @@ const MyProfile = ({ userId }) => {
       {items.length > 0 && (
         <div>
           {items.map((item) => {
-            const imagesArray = JSON.parse(item.images);
-            const imgSrc =
-              imagesArray && imagesArray.length > 0
-                ? imagesArray[0].split("_")[1]
-                : null;
+            const imgSrc = JSON.parse(item.images);
+
             console.log("Image src:", imgSrc);
             return (
               <Card
@@ -265,7 +262,7 @@ const MyProfile = ({ userId }) => {
                   <div className="item-details-image">
                     {imgSrc && (
                       <Card.Img
-                        src={`https://orca-app-ik7qo.ondigitalocean.app/${imgSrc}`}
+                        src={`https://orca-app-ik7qo.ondigitalocean.app/api/images/${imgSrc}`}
                         alt={`Image 1`}
                         className="img-fluid"
                         style={{ width: "100px", height: "100px" }}

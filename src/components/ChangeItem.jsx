@@ -30,10 +30,10 @@ const ChangeItem = ({ itemId }) => {
         );
 
         if (wantedItem) {
-          const wantedItemImages = JSON.parse(wantedItem.images); // Parse the images array
-          const formattedImages = wantedItemImages.map(
-            (image) => image.substring(image.indexOf("_") + 1) // Remove everything before the underscore
-          );
+          const formattedImages = JSON.parse(wantedItem.images); // Parse the images array
+          // const formattedImages = wantedItemImages.map(
+          //   (image) => image.substring(image.indexOf("_") + 1) // Remove everything before the underscore
+          // );
 
           setWantedItemImages(formattedImages);
           console.log("e" + formattedImages);
@@ -126,7 +126,7 @@ const ChangeItem = ({ itemId }) => {
                 <div key={index} className="slider-image-container">
                   <img
                     className="slider-image"
-                    src={"/" + image}
+                    src={`https://orca-app-ik7qo.ondigitalocean.app/api/images/${image}`}
                     alt={`Item ${index}`}
                   />
                 </div>
@@ -159,13 +159,13 @@ const ChangeItem = ({ itemId }) => {
               {myItemImages.map((item, index) => (
                 <div key={item.id} className="slider-image-container">
                   {JSON.parse(item.images).map((image, imageIndex) => {
-                    const imageName = image.substring(image.indexOf("_") + 1); // Remove everything before the underscore
+                    // Remove everything before the underscore
                     if (imageIndex === 0) {
                       return (
                         <div key={imageIndex} className="my-item">
                           <img
                             className="slider-image"
-                            src={"/" + imageName}
+                            src={`https://orca-app-ik7qo.ondigitalocean.app/api/images/${image}`}
                             alt={`My Item ${index}`}
                           />
 

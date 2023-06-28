@@ -19,8 +19,7 @@ const Grid = ({ items, category }) => {
   };
 
   const renderItems = filteredItems.map((item) => {
-    const images = JSON.parse(item.images);
-    const filename = images.length > 0 ? images[0].match(/[^_]+$/)[0] : "";
+    const filename = JSON.parse(item.images);
 
     return (
       <Col key={item.id} className="mb-3" xs={12} sm={6} md={4} lg={4} xl={4}>
@@ -41,7 +40,7 @@ const Grid = ({ items, category }) => {
                 }}
               >
                 <Card.Img
-                  src={filename}
+                  src={`https://orca-app-ik7qo.ondigitalocean.app/api/images/${filename}`}
                   alt={`image-${item.id}`}
                   style={{
                     width: "100%",

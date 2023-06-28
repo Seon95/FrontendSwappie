@@ -147,9 +147,7 @@ const Notifications = () => {
               </div>
               <div>
                 <Image
-                  src={item.itemImage.substring(
-                    item.itemImage.lastIndexOf("_") + 1
-                  )}
+                  src={`https://orca-app-ik7qo.ondigitalocean.app/api/images/${item.itemImage}`}
                   alt="Item"
                   style={{
                     width: "100px",
@@ -190,9 +188,7 @@ const Notifications = () => {
           {selectedItem && (
             <>
               <Image
-                src={selectedItem.itemImage.substring(
-                  selectedItem.itemImage.lastIndexOf("_") + 1
-                )}
+                src={`https://orca-app-ik7qo.ondigitalocean.app/api/images/${selectedItem.itemImage}`}
                 alt="Selected Item"
                 style={{ width: "100%" }}
               />
