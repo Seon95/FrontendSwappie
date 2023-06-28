@@ -195,7 +195,7 @@ const MyProfile = ({ userId }) => {
     });
   };
 
-  const handleUpdateItem = async () => {
+  const handleUpdateItem = async (e) => {
     e.preventDefault();
 
     try {
