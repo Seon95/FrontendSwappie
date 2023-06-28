@@ -31,10 +31,6 @@ const ChangeItem = ({ itemId }) => {
 
         if (wantedItem) {
           const formattedImages = JSON.parse(wantedItem.images); // Parse the images array
-          // const formattedImages = wantedItemImages.map(
-          //   (image) => image.substring(image.indexOf("_") + 1) // Remove everything before the underscore
-          // );
-
           setWantedItemImages(formattedImages);
           console.log("e" + formattedImages);
 
@@ -95,6 +91,8 @@ const ChangeItem = ({ itemId }) => {
       );
 
       alert("Swap item request sent successfully!");
+
+      window.location.href = "/"; // Redirect to the homepage
     } catch (error) {
       console.error("Error sending swap item request:", error);
       alert("Error sending swap item request. Please try again.");

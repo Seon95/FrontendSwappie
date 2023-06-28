@@ -15,10 +15,13 @@ const Header = ({ handleLogin, handleLogout, loggedIn }) => {
       setUserName(storedUserName);
     }
   }, []);
+
   const handleLogoutClick = () => {
     handleLogout();
     localStorage.removeItem("loggedIn");
     localStorage.removeItem("userName");
+    localStorage.removeItem("token");
+    window.location.href = "/"; // Redirect to the homepage
   };
 
   return (
