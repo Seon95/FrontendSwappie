@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { ListGroup, Image, Modal, Button, Container } from "react-bootstrap";
-
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTimes } from "@fortawesome/free-solid-svg-icons";
 const Notifications = () => {
   const [swapRequests, setSwapRequests] = useState([]);
   const [itemData, setItemData] = useState([]);
@@ -48,11 +49,15 @@ const Notifications = () => {
               `https://orca-app-ik7qo.ondigitalocean.app/api/user/${request.my_item_id}`
             );
             const myItemUserData = myItemResponse.data.user;
+            const myItemUser = myItemUserData.username;
+
             const myItemsData = JSON.parse(myItemUserData.items);
             const myItem = myItemsData.find(
               (item) => item.id === request.my_item_id
             );
             const myItemName = myItem.name;
+            const myItemId = myItem.id;
+            const myItemDescription = myItem.description;
             const myItemImage = myItem.images.slice(1, -1).slice(1, -1);
             console.log("22" + myItemImage);
 
@@ -68,7 +73,10 @@ const Notifications = () => {
               itemImage,
               myItemName,
               reqId,
+              myItemUser,
+              myItemDescription,
             };
+            console.log(myItemName + "myitem" + itemName + "itemname");
           } catch (error) {
             console.error("Error fetching item data:", error);
 
@@ -79,11 +87,11 @@ const Notifications = () => {
               itemImage: "",
               myItemName: "",
               myItemImage: "",
+              myItemUser: "",
             };
           }
         })
       );
-
       setItemData(resolvedItems);
     };
 
@@ -143,14 +151,12 @@ const Notifications = () => {
                 backgroundColor: "transparent",
                 border: "1px solid",
                 borderColor: "black",
+                fontWeight: "600",
               }}
             >
               <div>
-                <u>{item.senderName}</u> wants to change his{" "}
-                <u>{item.myItemName}</u> item for your item{" "}
-                <u>{item.itemName}</u>
-              </div>
-              <div>
+                <b>{item.myItemUser}</b> wants to change his{" "}
+                <b> {item.myItemName} </b>
                 <Image
                   src={`https://orca-app-ik7qo.ondigitalocean.app/api/images/${item.myItemImage}`}
                   alt="Item"
@@ -158,10 +164,23 @@ const Notifications = () => {
                     width: "100px",
                     height: "100px",
                     cursor: "pointer",
+                    marginLeft: "15px",
+                    marginRight: "15px",
                   }}
                   onClick={() => handleImageClick(item)}
+                />{" "}
+                item for your item <b>{item.itemName}</b>
+                <Image
+                  src={`https://orca-app-ik7qo.ondigitalocean.app/api/images/${item.itemImage}`}
+                  alt="Item"
+                  style={{
+                    width: "100px",
+                    height: "100px",
+                    marginLeft: "15px",
+                  }}
                 />
               </div>
+
               <div style={{ justifySelf: "end" }}>
                 <Button
                   variant="success"
@@ -186,32 +205,53 @@ const Notifications = () => {
       )}
 
       <Modal show={showModal} onHide={handleCloseModal}>
-        <Modal.Header closeButton>
-          <Modal.Title>{selectedItem && selectedItem.itemName}</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
+        <Modal.Body
+          closeButton
+          style={{
+            backgroundColor: "lightgrey",
+            border: "2px solid white",
+            borderRadius: "10px",
+            boxShadow: "0 0 10px rgba(0, 0, 0, 0.3)",
+          }}
+        >
+          <button
+            type="button"
+            className="close"
+            aria-label="Close"
+            onClick={handleCloseModal}
+            style={{ color: "red" }}
+          >
+            <FontAwesomeIcon icon={faTimes} />
+          </button>
+          <div className="d-flex justify-content-center w-100">
+            <h5 className="text-center">
+              {selectedItem && selectedItem.myItemName}
+            </h5>
+          </div>
           {selectedItem && (
-            <>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                flexDirection: "column",
+              }}
+            >
               <Image
-                src={`https://orca-app-ik7qo.ondigitalocean.app/api/images/${selectedItem.itemImage}`}
+                src={`https://orca-app-ik7qo.ondigitalocean.app/api/images/${selectedItem.myItemImage}`}
                 alt="Selected Item"
-                style={{ width: "100%" }}
+                style={{
+                  maxWidth: "300px",
+                  maxHeight: "300px",
+                  width: "100%",
+                  height: "100%",
+                  margin: "0 auto", // Center the image horizontally
+                }}
               />
-              <p>{selectedItem.itemDescription}</p>
-              <Button
-                variant="success"
-                className="mr-2"
-                onClick={() => handleAcceptRequest(selectedItem)}
-              >
-                Accept
-              </Button>
-              <Button
-                variant="danger"
-                onClick={() => handleRejectRequest(selectedItem)}
-              >
-                Reject
-              </Button>
-            </>
+              <p style={{ marginTop: "20px", color: "black" }}>
+                {selectedItem.myItemDescription}
+              </p>
+            </div>
           )}
         </Modal.Body>
       </Modal>
