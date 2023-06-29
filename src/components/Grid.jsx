@@ -23,7 +23,19 @@ const Grid = ({ items, category }) => {
     const firstFilename = filenames.length > 0 ? filenames[0] : null;
 
     return (
-      <Col key={item.id} className="mb-3" xs={12} sm={6} md={4} lg={4} xl={4}>
+      <Col
+        key={item.id}
+        className={`mb-3 ${
+          window.innerWidth < 768
+            ? "d-flex justify-content-center align-items-center"
+            : ""
+        }`}
+        xs={12}
+        sm={6}
+        md={4}
+        lg={4}
+        xl={4}
+      >
         <Card
           style={{
             width: "250px",
@@ -53,7 +65,7 @@ const Grid = ({ items, category }) => {
               <div>No image available</div>
             )}
           </Link>
-          <Card.Body>
+          <Card.Body className="d-flex align-items-center justify-content-center">
             <Card.Text style={{ fontWeight: "600" }}>{item.name}</Card.Text>
           </Card.Body>
         </Card>
@@ -72,12 +84,12 @@ const Grid = ({ items, category }) => {
     const start = i * columns;
     const end = start + columns;
     const rowItems = renderItems.slice(start, end);
+    const isSingleItemRow = rowItems.length === 1;
+
     rows.push(
       <Row
         key={i}
-        className={`mt-4 ${
-          window.innerWidth < 768 ? "align-items-center" : ""
-        }`}
+        className={`mt-4 ${isSingleItemRow ? "justify-content-center" : ""}`}
       >
         {rowItems}
       </Row>
