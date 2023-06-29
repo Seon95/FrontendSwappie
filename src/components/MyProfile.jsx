@@ -87,17 +87,22 @@ const MyProfile = ({ userId }) => {
     setIsSubmitting(true);
 
     try {
+      // Validate image selection
+      if (selectedImages.length === 0) {
+        // Display an error message or perform appropriate action
+        console.error("Please select at least one image.");
+        return;
+      }
+
       const formData = new FormData();
       formData.append("name", name);
       formData.append("description", description);
       formData.append("category_id", category);
       formData.append("quantity", quantity);
 
-      if (selectedImages.length) {
-        selectedImages.forEach((image, index) => {
-          formData.append(`images[${index}]`, image);
-        });
-      }
+      selectedImages.forEach((image, index) => {
+        formData.append(`images[${index}]`, image);
+      });
 
       await axios.post(
         `https://orca-app-ik7qo.ondigitalocean.app/api/items/${userId}`,
