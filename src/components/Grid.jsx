@@ -62,7 +62,7 @@ const Grid = ({ items, category }) => {
   });
 
   const rows = [];
-  const mobileColumns = 2; // Number of columns on mobile devices
+  const mobileColumns = 1; // Number of columns on mobile devices
   const desktopColumns = 3; // Number of columns on desktop devices
   const columns = window.innerWidth < 768 ? mobileColumns : desktopColumns;
   const totalItems = renderItems.length;
@@ -76,7 +76,7 @@ const Grid = ({ items, category }) => {
       <Row
         key={i}
         className={`mt-4 ${
-          window.innerWidth < 768 ? "justify-content-center" : ""
+          window.innerWidth < 768 ? "align-items-center" : ""
         }`}
       >
         {rowItems}
